@@ -1,6 +1,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import Comment from "./Comment";
+import FullViewImage from "./FullViewImage";
 
 const Container = styled.div`
     position: relative;
@@ -13,6 +14,7 @@ const Container = styled.div`
         margin: 10px 0;
     }
 `;
+
 const ImageBox = styled.div`
     width: 100%;
     display: grid;
@@ -20,6 +22,7 @@ const ImageBox = styled.div`
     & > img {
         border-radius: 8px;
         width: 100%;
+        cursor: pointer;
     }
 
     &[data-grid="2"] {
@@ -27,7 +30,7 @@ const ImageBox = styled.div`
         gap: 5px;
         & > img {
             border-radius: 8px;
-            width: 100%; /* Chia đều hai hình ảnh */
+            width: 100%;
         }
     }
 
@@ -42,6 +45,7 @@ const ImageBox = styled.div`
         }
     }
 `;
+
 const Friend = styled.li`
     width: 100%;
     margin: 10px 0;
@@ -92,11 +96,20 @@ const Interact = styled.div`
         }
     }
 `;
+
 const Feed = ({ post }) => {
     const { user, content, imgSrc } = post;
-
     const [isLiked, setIsLiked] = useState(false);
     const [isCommenting, setIsCommenting] = useState(false);
+    const [fullViewImageIndex, setFullViewImageIndex] = useState(null);
+
+    const handleNext = () => {
+        setFullViewImageIndex((prevIndex) => (prevIndex + 1) % imgSrc.length);
+    };
+
+    const handlePrev = () => {
+        setFullViewImageIndex((prevIndex) => (prevIndex - 1 + imgSrc.length) % imgSrc.length);
+    };
 
     return (
         <Container>
@@ -106,18 +119,32 @@ const Feed = ({ post }) => {
             </Friend>
             <p>{content}</p>
             <ImageBox data-grid={imgSrc.length}>
-                {imgSrc.map((item, index) => {
-                    return <img key={index} src={item} alt={`post-about-${content}-of-${user.name}`} />;
-                })}
+                {imgSrc.map((item, index) => (
+                    <img
+                        key={index}
+                        src={item}
+                        alt={`post-about-${content}-of-${user.name}`}
+                        onClick={() => setFullViewImageIndex(index)}
+                    />
+                ))}
             </ImageBox>
+            {fullViewImageIndex !== null && (
+                <FullViewImage
+                    src={imgSrc[fullViewImageIndex]}
+                    onClose={() => setFullViewImageIndex(null)}
+                    onNext={handleNext}
+                    onPrev={handlePrev}
+                />
+            )}
             <Interact>
                 <button onClick={() => setIsLiked(!isLiked)}>{isLiked ? <strong>Liked</strong> : "Like"}</button>
                 <button onClick={() => setIsCommenting(!isCommenting)}>
                     {isCommenting ? <strong>Comment</strong> : "Comment"}
                 </button>
             </Interact>
-            {isCommenting ? <Comment /> : ""}
+            {isCommenting && <Comment />}
         </Container>
     );
 };
+
 export default Feed;
