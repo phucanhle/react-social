@@ -50,9 +50,26 @@ const Title = styled.h1`
     font-weight: 600;
     margin: 0 0 10px;
 `;
+
 const Personal = () => {
     const user = useSelector((state) => state.auth.user);
 
+    const feedList = {
+        own: [
+            {
+                postid: 1,
+                user: {
+                    avatar: "https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain",
+                    name: "Me",
+                },
+                content: "New Home!!",
+                imgSrc: [
+                    "https://i.pinimg.com/564x/8b/3b/1d/8b3b1d69c4e45f903002a9ab1ffa53d3.jpg",
+                    "https://i.pinimg.com/564x/55/67/f9/5567f98308341de496b26d8a88f896c9.jpg",
+                ],
+            },
+        ],
+    };
     return (
         <Container>
             <PersonaInfor user={user} />
@@ -61,29 +78,14 @@ const Personal = () => {
                     <Title>Ảnh</Title>
 
                     <Images>
-                        <img
-                            src="https://th.bing.com/th/id/R.d04ab4b23b2e4b577f28bb38a5cdaf4e?rik=oV4iTAagIbE2CA&pid=ImgRaw&r=0"
-                            alt=""
-                        />
-                        <img
-                            src="https://th.bing.com/th/id/R.d04ab4b23b2e4b577f28bb38a5cdaf4e?rik=oV4iTAagIbE2CA&pid=ImgRaw&r=0"
-                            alt=""
-                        />
-                        <img
-                            src="https://th.bing.com/th/id/R.9ee7bba93761fc61058385ef4976691e?rik=%2bZZTQFWjeDTAbA&pid=ImgRaw&r=0"
-                            alt=""
-                        />
-                        <img
-                            src="https://th.bing.com/th/id/R.82ea13502345d780f70ff12c7b32532f?rik=WTxji5R0HLW5ig&pid=ImgRaw&r=0"
-                            alt=""
-                        />
-                        <img
-                            src="https://th.bing.com/th/id/R.d04ab4b23b2e4b577f28bb38a5cdaf4e?rik=oV4iTAagIbE2CA&pid=ImgRaw&r=0"
-                            alt=""
-                        />
+                        {feedList.own.map((post, index) =>
+                            post.imgSrc.map((src, imgIndex) => (
+                                <img key={`h${index}-${imgIndex}`} src={src} alt="Hình" />
+                            )),
+                        )}
                     </Images>
                 </Content>
-                <FeedList />
+                <FeedList feeds={feedList.own} />
             </History>
         </Container>
     );

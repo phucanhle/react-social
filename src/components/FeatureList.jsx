@@ -122,7 +122,7 @@ const FeatureList = () => {
                         />
                     </svg>
 
-                    <Link>Chat </Link>
+                    <Link to="/chat">Chat </Link>
                 </li>
                 <li>
                     <svg
@@ -142,7 +142,7 @@ const FeatureList = () => {
                         />
                     </svg>
 
-                    <Link>Trang chính </Link>
+                    <Link to="/">Trang chính </Link>
                 </li>
                 <li>
                     <svg
@@ -162,7 +162,7 @@ const FeatureList = () => {
                         />
                     </svg>
 
-                    <Link>Lưu trữ </Link>
+                    <Link to="saved">Lưu trữ </Link>
                 </li>
                 <li>
                     <svg
@@ -182,7 +182,7 @@ const FeatureList = () => {
                         />
                     </svg>
 
-                    <Link>Cài đặt </Link>
+                    <Link to="/settings">Cài đặt </Link>
                 </li>
             </Features>
             <Button outline-data="true" onClick={() => handleLogout()}>

@@ -100,6 +100,7 @@ const Interact = styled.div`
 const Feed = ({ post }) => {
     const { user, content, imgSrc } = post;
     const [isLiked, setIsLiked] = useState(false);
+    const [isSaved, setIsSaved] = useState(false);
     const [isCommenting, setIsCommenting] = useState(false);
     const [fullViewImageIndex, setFullViewImageIndex] = useState(null);
 
@@ -141,6 +142,7 @@ const Feed = ({ post }) => {
                 <button onClick={() => setIsCommenting(!isCommenting)}>
                     {isCommenting ? <strong>Comment</strong> : "Comment"}
                 </button>
+                <button onClick={() => setIsSaved(!isSaved)}>{isSaved ? <strong>Saved</strong> : "Save"}</button>
             </Interact>
             {isCommenting && <Comment />}
         </Container>

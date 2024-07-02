@@ -19,7 +19,7 @@ const Article = styled.article`
     justify-content: center;
     align-items: center;
 `;
-const Form = styled.form`
+const Form = styled.div`
     position: relative;
 
     display: flex;
@@ -101,6 +101,8 @@ const Button = styled.button`
 `;
 
 const HomePage = () => {
+    const [isRegister, setIsRegister] = useState(false);
+
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
 
@@ -114,28 +116,76 @@ const HomePage = () => {
         navigate("/");
     };
 
+    const handleRegister = (e) => {
+        e.preventDefault();
+        const userData = { username, password };
+
+        console.log(userData);
+
+        setIsRegister(false);
+    };
+
     return (
         <Article>
             <div className="background"></div>
-            <Form onSubmit={handleLogin}>
-                <h3>Login</h3>
-                <div>
-                    <label htmlFor="">Username</label>
-                    <Input type="text" value={username} onInput={(e) => setUsername(e.target.value)} />
-                </div>
-                <div>
-                    <label htmlFor="">Password</label>
-                    <Input
-                        type="password"
-                        value={password}
-                        onInput={(e) => setPassword(e.target.value)}
-                        autoComplete="off"
-                    />
-                </div>
-                <Button>Login</Button>
-                <Link to={"/forget"}>Quên mật khẩu?</Link>
-                <Button outline-data="true">Register</Button>
-            </Form>
+            {!isRegister ? (
+                <Form>
+                    <h3>Đăng nhập</h3>
+                    <div>
+                        <label htmlFor="">Username</label>
+                        <Input type="text" value={username} onInput={(e) => setUsername(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="">Password</label>
+                        <Input
+                            type="password"
+                            value={password}
+                            onInput={(e) => setPassword(e.target.value)}
+                            autoComplete="off"
+                        />
+                    </div>
+                    <Button onClick={handleLogin}>Đăng nhập</Button>
+                    <Link to={"/forget"}>Quên mật khẩu?</Link>
+                    <Button
+                        outline-data="true"
+                        type="reset"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setIsRegister(true);
+                        }}
+                    >
+                        Đăng kí
+                    </Button>
+                </Form>
+            ) : (
+                <Form>
+                    <h3>Đăng kí</h3>
+                    <div>
+                        <label htmlFor="">Username</label>
+                        <Input type="text" value={username} onInput={(e) => setUsername(e.target.value)} />
+                    </div>
+                    <div>
+                        <label htmlFor="">Password</label>
+                        <Input
+                            type="password"
+                            value={password}
+                            onInput={(e) => setPassword(e.target.value)}
+                            autoComplete="off"
+                        />
+                    </div>
+                    <Button onClick={handleRegister}>Đăng kí</Button>
+                    <Button
+                        outline-data="true"
+                        type="reset"
+                        onClick={(e) => {
+                            e.preventDefault();
+                            setIsRegister(false);
+                        }}
+                    >
+                        Đăng nhập
+                    </Button>
+                </Form>
+            )}
         </Article>
     );
 };

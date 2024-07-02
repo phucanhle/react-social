@@ -5,6 +5,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-item: center;
+    margin: 0 0 10px;
     & input,
     button {
         padding: 10px 20px;

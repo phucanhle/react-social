@@ -1,60 +1,14 @@
 import styled from "styled-components";
-import React, { Suspense, lazy } from "react";
-
-const FeatureList = lazy(() => import("../components/FeatureList"));
-const FeedList = lazy(() => import("../components/FeedList"));
-const FriendList = lazy(() => import("../components/FriendList"));
-const Article = styled.article`
-    min-height: calc(100vh - 50px);
+import FeedList from "../components/FeedList";
+const Container = styled.div`
+    min-height: 100vh;
     width: 100%;
-    padding-top: 50px;
-
-    display: grid;
-    grid-template-columns: 25% 55% 20%;
-
-    @media screen and (max-width: 898px) {
-        grid-template-columns: 100%;
-        padding: 50px 20px;
-    }
-
-    @media screen and (min-width: 899px) and (max-width: 1098px) {
-        padding: 50px 20px;
-        grid-template-columns: 70% 30%;
-    }
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 50px 0 0;
 `;
 
-const LeftDiv = styled.div`
-    position: relative;
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    @media screen and (max-width: 1098px) {
-        display: none;
-    }
-`;
-
-const MiddleDiv = styled.div`
-    position: relative;
-    padding: 20px;
-`;
-
-const RightDiv = styled.div`
-    position: relative;
-    width: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-
-    @media screen and (max-width: 898px) {
-        display: none;
-    }
-`;
-
-const FallbackComponent = () => <div>Loading...</div>;
-
-const HomePage = () => {
-    // Temporary array for the list of the first 10 posts, concatenated at the backend.
+const Saved = () => {
     const feeds = [
         {
             postid: 1,
@@ -66,6 +20,8 @@ const HomePage = () => {
             imgSrc: [
                 "https://www.thoughtco.com/thmb/EKnmgoAr_X4TrIpxBiPYu9lao9U=/2000x1333/filters:fill(auto,1)/GettyImages-468963673-5ad40ad2fa6bcc0036add08a.jpg",
             ],
+            Liked: [],
+            Saved: [],
         },
         {
             postid: 2,
@@ -79,6 +35,8 @@ const HomePage = () => {
                 "https://wallpaperaccess.com/full/4211388.jpg",
                 "https://i.pinimg.com/originals/d8/07/11/d80711b7df97434667621b8054ba8956.jpg",
             ],
+            Liked: [],
+            Saved: [],
         },
         {
             postid: 3,
@@ -91,6 +49,8 @@ const HomePage = () => {
                 "https://i.pinimg.com/564x/8b/3b/1d/8b3b1d69c4e45f903002a9ab1ffa53d3.jpg",
                 "https://i.pinimg.com/564x/55/67/f9/5567f98308341de496b26d8a88f896c9.jpg",
             ],
+            Liked: [],
+            Saved: [],
         },
         {
             postid: 4,
@@ -103,27 +63,15 @@ const HomePage = () => {
                 "https://i.pinimg.com/564x/8b/3b/1d/8b3b1d69c4e45f903002a9ab1ffa53d3.jpg",
                 "https://i.pinimg.com/564x/55/67/f9/5567f98308341de496b26d8a88f896c9.jpg",
             ],
+            Liked: [],
+            Saved: [],
         },
     ];
-
     return (
-        <Article>
-            <LeftDiv>
-                <Suspense fallback={<FallbackComponent />}>
-                    <FeatureList />
-                </Suspense>
-            </LeftDiv>
-            <MiddleDiv>
-                <Suspense fallback={<FallbackComponent />}>
-                    <FeedList feeds={feeds} post={true} />
-                </Suspense>
-            </MiddleDiv>
-            <RightDiv>
-                <Suspense fallback={<FallbackComponent />}>
-                    <FriendList />
-                </Suspense>
-            </RightDiv>
-        </Article>
+        <Container>
+            <FeedList feeds={feeds} post={false} />
+        </Container>
     );
 };
-export default HomePage;
+
+export default Saved;

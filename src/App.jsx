@@ -7,16 +7,20 @@ import PrivateRoute from "./routes/PrivateRoute";
 import Loading from "./pages/Loadding";
 
 const HomePage = lazy(() => import("./pages/Home"));
-const Projector = lazy(() => import("./pages/Projector"));
 const NewsPage = lazy(() => import("./pages/News"));
 const Personal = lazy(() => import("./pages/Personal"));
+const Chat = lazy(() => import("./pages/Chat"));
+const Saved = lazy(() => import("./pages/Saved"));
+const Settings = lazy(() => import("./pages/Settings"));
 
 const App = () => {
     const menu = [
         { text: "Thảo luận", path: "/", component: HomePage },
-        { text: "Promo", path: "/projector", component: Projector },
         { text: "Tin tức", path: "/news", component: NewsPage },
         { text: "Trang cá nhân", path: "/personal", component: Personal },
+        { text: "Chat", path: "/chat", component: Chat },
+        { text: "Lưu trữ", path: "/saved", component: Saved },
+        { text: "Cài đặt", path: "/settings", component: Settings },
     ];
 
     return (
