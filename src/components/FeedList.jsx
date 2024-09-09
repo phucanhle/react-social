@@ -14,7 +14,7 @@ const FeedList = ({ feeds, post }) => {
 
   return (
     <Container>
-      {post ?? <Post user={user} />}
+      {post && <Post user={user} />}
       {feeds.map((item) => (
         <Feed post={item} key={item.postid} />
       ))}

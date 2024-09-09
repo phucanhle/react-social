@@ -4,6 +4,7 @@ import React, { Suspense, lazy } from "react";
 const FeatureList = lazy(() => import("../components/FeatureList"));
 const FeedList = lazy(() => import("../components/FeedList"));
 const FriendList = lazy(() => import("../components/FriendList"));
+const Banner = lazy(() => import("../components/Banner"));
 
 const Article = styled.article`
   width: 100%;
@@ -135,6 +136,7 @@ const HomePage = () => {
       <LeftDiv>
         <Suspense fallback={<FallbackComponent />}>
           <FeatureList />
+          <Banner />
         </Suspense>
       </LeftDiv>
       <MiddleDiv>
