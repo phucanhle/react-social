@@ -11,12 +11,18 @@ const Container = styled.div`
   position: fixed;
   width: 100%;
   max-width: 340px;
-  padding: 10px;
+  padding: 10px 20px;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
     rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
 
   border-radius: 10px;
   overflow-x: hidden;
+  & hr {
+    width: 90%;
+    border-width: 0;
+    height: 1px;
+    background-color: #e7e9eb;
+  }
   &::-webkit-scrollbar {
     width: 0px;
     background: transparent;
@@ -25,7 +31,7 @@ const Container = styled.div`
 const Features = styled.ul`
   margin: 20px 0;
   width: 100%;
-  & li { 
+  & li {
     display: flex;
     align-items: center;
     padding: 20px;
@@ -88,6 +94,7 @@ const FeatureList = () => {
   return (
     <Container>
       <PersonaInfor user={user} />
+      <hr />
       <Features>
         <li>
           <svg

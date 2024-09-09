@@ -5,7 +5,7 @@ const MessageListContainer = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
-    height: calc(100% - 150px);
+    height: calc(100% - 110px);
     overflow-y: auto;
 `;
 

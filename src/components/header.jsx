@@ -37,11 +37,6 @@ const SearchGroup = styled.ul`
   display: flex;
   height: 100%;
   align-items: center;
-  & input {
-    padding: 5px 10px;
-    border-radius: 10px;
-    border: 1px solid gray;
-  }
 `;
 const HiddenFeature = styled.div`
   position: absolute;
@@ -70,6 +65,16 @@ const Button = styled.button`
   }
 `;
 
+const Input = styled.input`
+  position: relative;
+  width: 100%;
+  padding: 5px 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid gray;
+  font-family: var(--main-font);
+  font-size: 16px;
+`;
 const Header = () => {
   const [isOpenMenu, setIsOpenMenu] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -94,7 +99,7 @@ const Header = () => {
           <Link to="/">Logo</Link>
         </h1>
         <SearchGroup>
-          <input type="text" placeholder="Tìm kiếm" />
+          <Input type="text" placeholder={`Tìm kiếm...`} autoComplete="off" />
         </SearchGroup>
         {isMobile ? (
           <>
