@@ -2,8 +2,10 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
+
 import FeatureList from "./FeatureList";
 import logo from "../assets/logo.png";
+
 const Container = styled.header`
     position: fixed;
     z-index: 10;
