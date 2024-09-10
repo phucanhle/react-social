@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import React, { memo } from "react";
-
+import { memo, useState } from "react";
+import { Link } from "react-router-dom";
 const Container = styled.div`
     position: fixed;
     max-height: calc(100vh - 50px - 40px);
@@ -43,7 +43,7 @@ const ItemContainer = styled.li`
     &:hover {
         background-color: #e4e6e9;
     }
-    & img {
+    & > img {
         position: relative;
         aspect-ratio: 1 / 1;
         object-fit: cover;
@@ -63,13 +63,68 @@ const ItemContainer = styled.li`
         width: 10px;
         height: 10px;
         position: absolute;
-        z-index: 999;
+        z-index: 3;
         top: 10px;
         right: 10px;
         border-radius: 50%;
     }
 `;
+const Popup = styled.div`
+    width: 240px;
+    height: 160px;
+    position: absolute;
 
+    bottom: 50px;
+    left: 80px;
+    z-index: 5;
+    border-radius: 10px;
+    background-color: #ffffff;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    transition: all 0.4s ease;
+
+    & > img {
+        border-radius: 10px 10px 0 0;
+        width: 100%;
+        height: 50%;
+        object-fit: cover;
+    }
+    & .actions {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        gap: 10px;
+
+        & button {
+            width: 50%;
+            padding: 7px 0;
+            font-size: 14px;
+            font-weight: 500;
+            background: none;
+            border-radius: 5px;
+            border: 1px solid #7eacb5;
+            cursor: pointer;
+            transition: background 0.4s ease;
+            &.primary {
+                background-color: #005c78;
+                color: white;
+                border: none;
+                &:hover {
+                    background-color: #16325b;
+                    color: white;
+                }
+            }
+            &:hover {
+                background-color: #7eacb5;
+                color: white;
+            }
+            & a {
+                color: inherit;
+                text-decoration: none;
+            }
+        }
+    }
+`;
 const FriendList = ({ onFriendSelect }) => {
     const listFriend = [
         {
@@ -163,15 +218,47 @@ const FriendList = ({ onFriendSelect }) => {
             name: "Victor",
         },
     ];
+    const [hoveredIndex, setHoveredIndex] = useState(null);
+
+    const handleMouseEnter = (index) => {
+        setHoveredIndex(index);
+    };
+
+    const handleMouseLeave = () => {
+        setHoveredIndex(null);
+    };
 
     return (
         <Container>
             <h3>Bạn bè ({listFriend.length})</h3>
-            <List>
+            <List onMouseLeave={handleMouseLeave}>
                 {listFriend.map((item, index) => (
-                    <ItemContainer key={index} onClick={() => onFriendSelect(item)}>
+                    <ItemContainer
+                        key={index}
+                        onClick={() => onFriendSelect(item)}
+                        onMouseEnter={() => handleMouseEnter(index)}
+                    >
                         <img src={item.avatar} alt={`avatar-of-${item.name}`} />
                         <p>{item.name}</p>
+                        {hoveredIndex === index && (
+                            <Popup style={{ top: index >= 4 ? "" : "10px" }}>
+                                <img
+                                    src={item.avatar}
+                                    alt={`avatar-of-${item.name}`}
+                                />
+                                <p>{item.name}</p>
+                                <div className="actions">
+                                    <button className="primary">
+                                        <Link to="/chat">Nhắn tin</Link>
+                                    </button>
+                                    <button>
+                                        <Link to={`/${item.id}`}>
+                                            Trang cá nhân
+                                        </Link>
+                                    </button>
+                                </div>
+                            </Popup>
+                        )}
                     </ItemContainer>
                 ))}
             </List>

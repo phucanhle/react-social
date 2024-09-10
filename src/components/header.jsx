@@ -47,11 +47,6 @@ const Content = styled.div`
     }
 `;
 
-const SearchGroup = styled.ul`
-    display: flex;
-    height: 100%;
-    align-items: center;
-`;
 const HiddenFeature = styled.div`
     position: absolute;
     right: 300px;
@@ -78,24 +73,77 @@ const Button = styled.button`
         background-color: var(--white);
     }
 `;
+const SearchGroup = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    height: 100%;
+`;
 
 const Input = styled.input`
     position: relative;
     width: 100%;
-    padding: 5px 20px;
-    margin: 10px 0;
+    padding: 2px 20px;
     border-radius: 5px;
     border: 1px solid gray;
     font-family: var(--main-font);
     font-size: 16px;
 `;
+
+const Result = styled.div`
+    width: 240px;
+    position: absolute;
+    top: 55px;
+    border-radius: 10px;
+    background-color: #f8f9fa;
+    padding: 10px;
+    text-align: center;
+    & a {
+        width: 100%;
+        font-size: 14px;
+        text-decoration: none;
+        &.more {
+            display: block;
+            margin-top: 10px;
+        }
+    }
+`;
+
+const Items = styled.div`
+    width: 100%;
+    padding: 5px 10px;
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+    & img {
+        width: 40px;
+        aspect-ratio: 1/1;
+        object-fit: cover;
+        border-radius: 50px;
+    }
+    & p {
+        font-size: 14px;
+        font-weight: 500;
+        margin: 0 10px;
+    }
+    &:hover {
+        background-color: #00000010;
+    }
+`;
 const Header = () => {
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const user = useSelector((state) => state.auth.user);
-
+    const [searchInput, setSearchInput] = useState(null);
     const checkIsMobile = () => {
         setIsMobile(window.innerWidth <= 1099);
+    };
+
+    const handleInputSearch = (value) => {
+        console.log(value);
+        setSearchInput(value);
     };
 
     useEffect(() => {
@@ -106,6 +154,7 @@ const Header = () => {
         };
     }, []);
     if (!user) return "";
+
     return (
         <Container>
             <Content>
@@ -116,7 +165,36 @@ const Header = () => {
                     </Link>
                 </h1>
                 <SearchGroup>
-                    <Input type="text" placeholder={`Tìm kiếm...`} autoComplete="off" />
+                    <Input
+                        type="search"
+                        placeholder={`Tìm kiếm...`}
+                        onChange={(e) => handleInputSearch(e.target.value)}
+                    />
+                    {searchInput && (
+                        <Result>
+                            <Link to="/id">
+                                <Items>
+                                    <img
+                                        src="https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain"
+                                        alt=""
+                                    />
+                                    <p>Name</p>
+                                </Items>
+                            </Link>
+                            <Link to="/id">
+                                <Items>
+                                    <img
+                                        src="https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain"
+                                        alt=""
+                                    />
+                                    <p>Name</p>
+                                </Items>
+                            </Link>
+                            <Link to="/search" className="more">
+                                Xem thêm
+                            </Link>
+                        </Result>
+                    )}
                 </SearchGroup>
                 {isMobile ? (
                     <>
@@ -145,7 +223,8 @@ const Header = () => {
                         <HiddenFeature>
                             {isOpenMenu ? (
                                 <>
-                                    <FeatureList /> <label htmlFor="close"></label>
+                                    <FeatureList />{" "}
+                                    <label htmlFor="close"></label>
                                 </>
                             ) : (
                                 ""

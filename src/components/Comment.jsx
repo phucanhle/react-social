@@ -5,7 +5,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     align-item: center;
-    margin: 0 0 10px;
+    margin: 10px 0;
     & input,
     button {
         padding: 10px 20px;
@@ -17,13 +17,18 @@ const Container = styled.div`
     & input {
         width: 80%;
         border: 1px solid #eee;
+
         margin-right: 10px;
+        &:focus {
+            border-color: #0d7c66;
+        }
     }
     & button {
         width: 20%;
         cursor: pointer;
         &:hover {
-            background-color: var(--white);
+            background-color: #0d7c66;
+            color: white;
         }
     }
 `;

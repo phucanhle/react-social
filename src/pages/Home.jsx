@@ -28,7 +28,7 @@ const LeftDiv = styled.div`
     width: 100%;
     padding: 20px;
     display: flex;
-    justify-content: start;
+    justify-content: end;
     @media screen and (max-width: 1098px) {
         display: none;
     }
@@ -46,9 +46,8 @@ const RightDiv = styled.div`
     width: 100%;
     padding: 20px;
     display: flex;
-    justify-content: end;
-
-    @media screen and (max-width: 898px) {
+    justify-content: start;
+    screen and (max-width: 898px) {
         display: none;
     }
 `; // Define the keyframes outside of the component

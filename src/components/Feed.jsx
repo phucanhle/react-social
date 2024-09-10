@@ -5,13 +5,15 @@ import FullViewImage from "./FullViewImage";
 
 const Container = styled.div`
     position: relative;
-    padding: 10px 20px;
+    padding: 10px;
     margin: 10px 0;
     background-color: white;
     border-radius: 12px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px, rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
+        rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
     & > p {
         margin: 10px 0;
+        font-size: 14px;
     }
 `;
 
@@ -46,25 +48,49 @@ const ImageBox = styled.div`
     }
 `;
 
-const Friend = styled.li`
+const ActionGroup = styled.li`
     width: 100%;
-    margin: 10px 0;
     padding: 5px 0;
     border-radius: 12px;
     position: relative;
     display: flex;
-    align-items: center;
+    justify-content: space-between;
     color: inherit;
     cursor: pointer;
-    & img {
-        position: relative;
-        aspect-ratio: 1/1;
-        object-fit: cover;
-        width: 50px;
-        border-radius: 100px;
+    & .user {
+        display: flex;
+        align-items: start;
+        & img {
+            position: relative;
+            aspect-ratio: 1/1;
+            object-fit: cover;
+            width: 40px;
+            border-radius: 100px;
+        }
+        & p {
+            margin: 5px 10px;
+            font-weight: 600;
+        }
     }
-    & p {
-        margin: 5px 10px;
+
+    & .actions {
+        display: flex;
+        align-items: start;
+        & button {
+            position: relative;
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            vertical-align: middle;
+            background-color: transparent;
+            border: none;
+            border-radius: 100px;
+            cursor: pointer;
+
+            &:hover {
+                background-color: #f0f2f5;
+            }
+        }
     }
 `;
 
@@ -74,22 +100,22 @@ const Interact = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-top: 2px solid #eee;
-    margin: 25px 0 0;
-    padding: 25px 20px;
+    margin-top: 10px;
 
     & button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         background: transparent;
         border: 0;
         outline: none;
         font-size: inherit;
         width: 50%;
-        padding: 10px;
-        border-radius: 12px;
+        border-radius: 5px;
         cursor: pointer;
-        & strong {
-            color: var(--navy);
-            font-weight: 600;
+        & p {
+            font-size: 14px;
+            margin-left: 10px;
         }
         &:hover {
             background-color: var(--white);
@@ -118,15 +144,58 @@ const Feed = ({ post }) => {
     };
 
     const handlePrev = () => {
-        setFullViewImageIndex((prevIndex) => (prevIndex - 1 + imgSrc.length) % imgSrc.length);
+        setFullViewImageIndex(
+            (prevIndex) => (prevIndex - 1 + imgSrc.length) % imgSrc.length
+        );
     };
 
     return (
         <Container>
-            <Friend>
-                <img src={user.avatar} alt={`avatar-of-${user.name}`} />
-                <p>{user.name}</p>
-            </Friend>
+            <ActionGroup>
+                <div className="user">
+                    <img src={user.avatar} alt={`avatar-of-${user.name}`} />
+                    <p>{user.name}</p>
+                </div>
+                <div className="actions">
+                    <button>
+                        <svg
+                            class="w-[32px] h-[32px] text-gray-800 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-width="3"
+                                d="M6 12h.01m6 0h.01m5.99 0h.01"
+                            />
+                        </svg>
+                    </button>
+                    <button>
+                        <svg
+                            class="w-[32px] h-[32px] text-gray-800 dark:text-white"
+                            aria-hidden="true"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                stroke="currentColor"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                stroke-width="3"
+                                d="M6 18 17.94 6M18 18 6.06 6"
+                            />
+                        </svg>
+                    </button>
+                </div>
+            </ActionGroup>
             <p>{content}</p>
             <ImageBox data-grid={imgSrc.length}>
                 {!loaded && <SkeletonWrapper />}
@@ -157,7 +226,7 @@ const Feed = ({ post }) => {
                             xmlns="http://www.w3.org/2000/svg"
                             width="32"
                             height="32"
-                            fill="red"
+                            fill="#F5004F"
                             viewBox="0 0 24 24"
                         >
                             <path d="m12.75 20.66 6.184-7.098c2.677-2.884 2.559-6.506.754-8.705-.898-1.095-2.206-1.816-3.72-1.855-1.293-.034-2.652.43-3.963 1.442-1.315-1.012-2.678-1.476-3.973-1.442-1.515.04-2.825.76-3.724 1.855-1.806 2.201-1.915 5.823.772 8.706l6.183 7.097c.19.216.46.34.743.34a.985.985 0 0 0 .743-.34Z" />
@@ -167,8 +236,8 @@ const Feed = ({ post }) => {
                             class="w-6 h-6 text-gray-800 dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="32"
+                            height="32"
                             fill="none"
                             viewBox="0 0 24 24"
                         >
@@ -181,6 +250,7 @@ const Feed = ({ post }) => {
                             />
                         </svg>
                     )}
+                    <p>Thích</p>
                 </button>
                 <button onClick={() => setIsCommenting(!isCommenting)}>
                     {isCommenting ? (
@@ -188,9 +258,9 @@ const Feed = ({ post }) => {
                             class="w-6 h-6 text-gray-800 dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="28"
-                            height="28"
-                            fill="blue"
+                            width="32"
+                            height="32"
+                            fill="#0D7C66"
                             viewBox="0 0 24 24"
                         >
                             <path
@@ -209,8 +279,8 @@ const Feed = ({ post }) => {
                             class="w-6 h-6 text-gray-800 dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="32"
+                            height="32"
                             fill="none"
                             viewBox="0 0 24 24"
                         >
@@ -223,6 +293,7 @@ const Feed = ({ post }) => {
                             />
                         </svg>
                     )}
+                    <p>Bình luận</p>
                 </button>
                 <button onClick={() => setIsSaved(!isSaved)}>
                     {isSaved ? (
@@ -230,9 +301,9 @@ const Feed = ({ post }) => {
                             class="w-6 h-6 text-gray-800 dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="28"
-                            height="28"
-                            fill="blue"
+                            width="32"
+                            height="32"
+                            fill="#295F98"
                             viewBox="0 0 24 24"
                         >
                             <path d="M7.833 2c-.507 0-.98.216-1.318.576A1.92 1.92 0 0 0 6 3.89V21a1 1 0 0 0 1.625.78L12 18.28l4.375 3.5A1 1 0 0 0 18 21V3.889c0-.481-.178-.954-.515-1.313A1.808 1.808 0 0 0 16.167 2H7.833Z" />
@@ -242,8 +313,8 @@ const Feed = ({ post }) => {
                             class="w-6 h-6 text-gray-800 dark:text-white"
                             aria-hidden="true"
                             xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
+                            width="32"
+                            height="32"
                             fill="none"
                             viewBox="0 0 24 24"
                         >
@@ -256,6 +327,7 @@ const Feed = ({ post }) => {
                             />
                         </svg>
                     )}
+                    <p>Lưu</p>
                 </button>
             </Interact>
             {isCommenting && <Comment />}
