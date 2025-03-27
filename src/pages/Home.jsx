@@ -79,49 +79,49 @@ const HomePage = () => {
         {
             postid: 1,
             user: {
-                avatar: "https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain",
-                name: "Alice",
+                avatar: "https://plus.unsplash.com/premium_photo-1689977968861-9c91dbb16049",
+                name: "Nguyễn Văn A", 
             },
-            content: "A mountain",
+            content: "Chuyến du lịch Đà Lạt cuối tuần",
             imgSrc: [
-                "https://www.thoughtco.com/thmb/EKnmgoAr_X4TrIpxBiPYu9lao9U=/2000x1333/filters:fill(auto,1)/GettyImages-468963673-5ad40ad2fa6bcc0036add08a.jpg",
+                "https://images.unsplash.com/photo-1586595276832-b6840c79bdfc",
+                "https://images.unsplash.com/photo-1573743136692-468c0424f2d2",
+                "https://images.unsplash.com/photo-1583414424369-779c5c39c518"
             ],
         },
         {
             postid: 2,
             user: {
-                avatar: "https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain",
-                name: "Alice",
+                avatar: "https://i.pinimg.com/564x/94/68/5c/94685c60484e97f582707a69bb5613e3.jpg",
+                name: "Trần Thị B",
             },
-            content: "Dragon ball hehehe",
+            content: "Món ăn mới làm hôm nay",
             imgSrc: [
                 "https://i.pinimg.com/564x/02/ba/65/02ba65e0f3b88a0f679f6f1e0b9b4a59.jpg",
-                "https://wallpaperaccess.com/full/4211388.jpg",
-                "https://i.pinimg.com/originals/d8/07/11/d80711b7df97434667621b8054ba8956.jpg",
+                "https://i.pinimg.com/564x/61/7d/ef/617def7d58f1daa7ea9cc127af8bb1c0.jpg"
             ],
         },
         {
             postid: 3,
             user: {
-                avatar: "https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain",
-                name: "Alice",
+                avatar: "https://i.pinimg.com/564x/1e/90/7f/1e907f17d3f4a5677377f2823d338e51.jpg",
+                name: "Lê Văn C",
             },
-            content: "New Home!!",
+            content: "Buổi tập gym hôm nay", 
             imgSrc: [
-                "https://i.pinimg.com/564x/8b/3b/1d/8b3b1d69c4e45f903002a9ab1ffa53d3.jpg",
-                "https://i.pinimg.com/564x/55/67/f9/5567f98308341de496b26d8a88f896c9.jpg",
+                "https://i.pinimg.com/564x/0e/78/a5/0e78a5a9c7d93c6acc8a9a5b5d3712c4.jpg"
             ],
         },
         {
             postid: 4,
             user: {
-                avatar: "https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain",
-                name: "Me",
+                avatar: "https://i.pinimg.com/564x/d8/2a/d6/d82ad6d4d6f7b51dba6c0c0794cd003d.jpg",
+                name: "Phạm Thị D",
             },
-            content: "New Home!!",
+            content: "Sách hay nên đọc",
             imgSrc: [
-                "https://i.pinimg.com/564x/8b/3b/1d/8b3b1d69c4e45f903002a9ab1ffa53d3.jpg",
-                "https://i.pinimg.com/564x/55/67/f9/5567f98308341de496b26d8a88f896c9.jpg",
+                "https://i.pinimg.com/564x/f1/86/51/f18651eeb6600f8c68299936d1d61db5.jpg",
+                "https://i.pinimg.com/564x/e9/b5/fb/e9b5fb8676f7dd4d2ca1e0315cd8c676.jpg"
             ],
         },
     ];
@@ -131,7 +131,7 @@ const HomePage = () => {
             <LeftDiv>
                 <Suspense fallback={<FallbackComponent />}>
                     <FeatureList />
-                    <Banner />
+              
                 </Suspense>
             </LeftDiv>
             <MiddleDiv>

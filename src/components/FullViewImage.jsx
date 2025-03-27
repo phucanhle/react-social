@@ -10,31 +10,67 @@ const FullViewContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(0, 0, 0, 0.8);
-    z-index: 100;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease;
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
 `;
 
 const FullViewImageStyled = styled.img`
-    max-height: 80vh;
-    max-width: 80vw;
+    max-height: 90vh;
+    max-width: 90vw;
     width: auto;
     height: auto;
-    border-radius: 10px;
-    box-shadow: rgba(255, 255, 255, 0.15) 0px 48px 100px 0px;
+    border-radius: 12px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    animation: zoomIn 0.3s ease;
+    object-fit: contain;
+
+    @keyframes zoomIn {
+        from {
+            transform: scale(0.95);
+            opacity: 0;
+        }
+        to {
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
 `;
 
 const CloseButton = styled.button`
     position: absolute;
-    top: 40px;
-    right: 40px;
+    top: 24px;
+    right: 24px;
+    width: 40px;
+    height: 40px;
     color: white;
-    padding: 5px;
-    border: 0;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+
     &:hover {
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: scale(1.1);
+    }
+
+    &:active {
+        transform: scale(0.95);
     }
 `;
 
@@ -42,83 +78,98 @@ const NavigationButton = styled.button`
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
     color: white;
-    padding: 10px;
-    border: 0;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.5);
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.1);
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(4px);
+
     &:hover {
-        background-color: rgba(0, 0, 0, 0.7);
+        background-color: rgba(255, 255, 255, 0.2);
+        transform: translateY(-50%) scale(1.1);
     }
-    ${(props) => (props.left ? "left: 20px;" : "right: 20px;")}
+
+    &:active {
+        transform: translateY(-50%) scale(0.95);
+    }
+
+    ${(props) => (props.left ? "left: 24px;" : "right: 24px;")}
 `;
 
 const SkeletonWrapper = styled.div`
     position: fixed;
-    width: 80vw;
-    height: 80vh;
+    width: 90vw;
+    height: 90vh;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     display: flex;
     justify-content: center;
     align-items: center;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    backdrop-filter: blur(4px);
 
     .loader {
-        width: 64px;
-        height: 64px;
+        width: 80px;
+        height: 80px;
         position: relative;
-        background: #fff;
-        border-radius: 4px;
+        background: transparent;
+        border-radius: 50%;
         overflow: hidden;
     }
+
     .loader:before {
         content: "";
         position: absolute;
         left: 0;
         bottom: 0;
-        width: 40px;
-        height: 40px;
+        width: 50px;
+        height: 50px;
         transform: rotate(45deg) translate(30%, 40%);
-        background: #ff9371;
-        box-shadow: 32px -34px 0 5px #ff3d00;
+        background: #0d7c66;
+        box-shadow: 40px -42px 0 5px #0b6b56;
         animation: slide 2s infinite ease-in-out alternate;
     }
+
     .loader:after {
         content: "";
         position: absolute;
-        left: 10px;
-        top: 10px;
-        width: 16px;
-        height: 16px;
+        left: 12px;
+        top: 12px;
+        width: 20px;
+        height: 20px;
         border-radius: 50%;
-        background: #ff3d00;
+        background: #0b6b56;
         transform: rotate(0deg);
         transform-origin: 35px 145px;
         animation: rotate 2s infinite ease-in-out;
     }
 
     @keyframes slide {
-        0%,
-        100% {
+        0%, 100% {
             bottom: -35px;
         }
-        25%,
-        75% {
+        25%, 75% {
             bottom: -2px;
         }
-        20%,
-        80% {
+        20%, 80% {
             bottom: 2px;
         }
     }
+
     @keyframes rotate {
         0% {
             transform: rotate(-15deg);
         }
-        25%,
-        75% {
+        25%, 75% {
             transform: rotate(0deg);
         }
         100% {
@@ -127,12 +178,29 @@ const SkeletonWrapper = styled.div`
     }
 `;
 
-const FullViewImage = ({ src, onClose, onNext, onPrev }) => {
+const ImageCounter = styled.div`
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(255, 255, 255, 0.1);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+`;
+
+const FullViewImage = ({ src, onClose, onNext, onPrev, currentIndex, totalImages }) => {
     const [loaded, setLoaded] = useState(false);
 
     const handleImageLoad = () => {
         setLoaded(true);
     };
+
     const handleFullViewClick = (e) => {
         e.stopPropagation();
     };
@@ -141,7 +209,7 @@ const FullViewImage = ({ src, onClose, onNext, onPrev }) => {
         <FullViewContainer onClick={onClose}>
             {!loaded && (
                 <SkeletonWrapper>
-                    <span class="loader"></span>
+                    <span className="loader"></span>
                 </SkeletonWrapper>
             )}
             <FullViewImageStyled
@@ -224,6 +292,27 @@ const FullViewImage = ({ src, onClose, onNext, onPrev }) => {
                         </svg>
                     </NavigationButton>
                 </>
+            )}
+            {totalImages > 1 && (
+                <ImageCounter>
+                    <svg
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="16"
+                        height="16"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                        />
+                    </svg>
+                    {currentIndex + 1} / {totalImages}
+                </ImageCounter>
             )}
         </FullViewContainer>
     );

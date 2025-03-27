@@ -5,33 +5,50 @@ import FullViewImage from "./FullViewImage";
 
 const Container = styled.div`
     position: relative;
-    padding: 10px;
-    margin: 10px 0;
+    padding: 16px;
+    margin: 16px 0;
     background-color: white;
-    border-radius: 12px;
-    box-shadow: rgba(0, 0, 0, 0.1) 0px 1px 3px 0px,
-        rgba(0, 0, 0, 0.06) 0px 1px 2px 0px;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
+
     & > p {
-        margin: 10px 0;
-        font-size: 14px;
+        margin: 12px 0;
+        font-size: 15px;
+        line-height: 1.5;
+        color: #1a1a1a;
     }
 `;
 
-const ImageBox = styled.div`
+const MediaBox = styled.div`
     width: 100%;
     display: grid;
+    margin: 12px 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background-color: #f8f9fa;
 
-    & > img {
-        border-radius: 8px;
+    & > img, & > video {
+        border-radius: 12px;
         width: 100%;
         cursor: pointer;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+        
+        &:hover {
+            transform: scale(1.02);
+        }
     }
 
     &[data-grid="2"] {
         grid-template-columns: 50% 50%;
-        gap: 5px;
-        & > img {
-            border-radius: 8px;
+        gap: 4px;
+        & > img, & > video {
+            border-radius: 12px;
             width: 100%;
         }
     }
@@ -39,8 +56,8 @@ const ImageBox = styled.div`
     &[data-grid="3"] {
         grid-template-columns: 1fr 1fr;
         grid-template-rows: auto auto;
-        gap: 5px;
-        & > img:first-child {
+        gap: 4px;
+        & > img:first-child, & > video:first-child {
             grid-row: span 2;
             height: 100%;
             object-fit: cover;
@@ -50,45 +67,66 @@ const ImageBox = styled.div`
 
 const ActionGroup = styled.li`
     width: 100%;
-    padding: 5px 0;
+    padding: 8px 0;
     border-radius: 12px;
     position: relative;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     color: inherit;
     cursor: pointer;
+    
     & .user {
         display: flex;
-        align-items: start;
+        align-items: center;
+        gap: 12px;
+        
         & img {
             position: relative;
             aspect-ratio: 1/1;
             object-fit: cover;
-            width: 40px;
-            border-radius: 100px;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            border: 2px solid #f0f2f5;
+            transition: transform 0.2s ease;
+            
+            &:hover {
+                transform: scale(1.05);
+            }
         }
+        
         & p {
-            margin: 5px 10px;
+            margin: 0;
             font-weight: 600;
+            font-size: 15px;
+            color: #1a1a1a;
         }
     }
 
     & .actions {
         display: flex;
-        align-items: start;
+        align-items: center;
+        gap: 8px;
+        
         & button {
             position: relative;
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             text-align: center;
             vertical-align: middle;
             background-color: transparent;
             border: none;
-            border-radius: 100px;
+            border-radius: 50%;
             cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
 
             &:hover {
                 background-color: #f0f2f5;
+                transform: scale(1.05);
             }
         }
     }
@@ -96,11 +134,13 @@ const ActionGroup = styled.li`
 
 const Interact = styled.div`
     width: 100%;
-    height: 30px;
+    height: 40px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid #f0f2f5;
 
     & button {
         display: flex;
@@ -110,22 +150,42 @@ const Interact = styled.div`
         border: 0;
         outline: none;
         font-size: inherit;
-        width: 50%;
-        border-radius: 5px;
+        width: 33.33%;
+        padding: 8px;
+        border-radius: 8px;
         cursor: pointer;
+        transition: all 0.2s ease;
+        
         & p {
             font-size: 14px;
-            margin-left: 10px;
+            margin-left: 8px;
+            color: #65676b;
+            font-weight: 500;
         }
+        
         &:hover {
-            background-color: var(--white);
+            background-color: #f0f2f5;
+            transform: translateY(-1px);
         }
     }
 `;
 
 const SkeletonWrapper = styled.div`
     width: 100%;
-    background-color: gray;
+    height: 300px;
+    background: linear-gradient(90deg, #f0f2f5 25%, #e4e6eb 50%, #f0f2f5 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+    border-radius: 12px;
+
+    @keyframes loading {
+        0% {
+            background-position: 200% 0;
+        }
+        100% {
+            background-position: -200% 0;
+        }
+    }
 `;
 
 const Feed = ({ post }) => {
@@ -133,20 +193,25 @@ const Feed = ({ post }) => {
     const [isLiked, setIsLiked] = useState(false);
     const [isSaved, setIsSaved] = useState(false);
     const [isCommenting, setIsCommenting] = useState(false);
-    const [fullViewImageIndex, setFullViewImageIndex] = useState(null);
+    const [fullViewMediaIndex, setFullViewMediaIndex] = useState(null);
     const [loaded, setLoaded] = useState(false);
 
-    const handleImageLoad = () => {
+    const handleMediaLoad = () => {
         setLoaded(true);
     };
+
     const handleNext = () => {
-        setFullViewImageIndex((prevIndex) => (prevIndex + 1) % imgSrc.length);
+        setFullViewMediaIndex((prevIndex) => (prevIndex + 1) % imgSrc.length);
     };
 
     const handlePrev = () => {
-        setFullViewImageIndex(
+        setFullViewMediaIndex(
             (prevIndex) => (prevIndex - 1 + imgSrc.length) % imgSrc.length
         );
+    };
+
+    const isVideo = (url) => {
+        return url.match(/\.(mp4|webm|ogg)$/i) || url.startsWith('data:video/');
     };
 
     return (
@@ -197,22 +262,32 @@ const Feed = ({ post }) => {
                 </div>
             </ActionGroup>
             <p>{content}</p>
-            <ImageBox data-grid={imgSrc.length}>
+            <MediaBox data-grid={imgSrc.length}>
                 {!loaded && <SkeletonWrapper />}
                 {imgSrc.map((item, index) => (
-                    <img
-                        key={index}
-                        src={item}
-                        alt={`Image ${index + 1} of ${content} by ${user.name}`}
-                        onClick={() => setFullViewImageIndex(index)}
-                        onLoad={handleImageLoad}
-                    />
+                    isVideo(item) ? (
+                        <video
+                            key={index}
+                            src={item}
+                            controls
+                            onClick={() => setFullViewMediaIndex(index)}
+                            onLoadedData={handleMediaLoad}
+                        />
+                    ) : (
+                        <img
+                            key={index}
+                            src={item}
+                            alt={`Image ${index + 1} of ${content} by ${user.name}`}
+                            onClick={() => setFullViewMediaIndex(index)}
+                            onLoad={handleMediaLoad}
+                        />
+                    )
                 ))}
-            </ImageBox>
-            {fullViewImageIndex !== null && (
+            </MediaBox>
+            {fullViewMediaIndex !== null && !isVideo(imgSrc[fullViewMediaIndex]) && (
                 <FullViewImage
-                    src={imgSrc[fullViewImageIndex]}
-                    onClose={() => setFullViewImageIndex(null)}
+                    src={imgSrc[fullViewMediaIndex]}
+                    onClose={() => setFullViewMediaIndex(null)}
                     onNext={handleNext}
                     onPrev={handlePrev}
                 />

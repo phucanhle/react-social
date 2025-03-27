@@ -1,5 +1,7 @@
 import styled from "styled-components";
 import FeedList from "../components/FeedList";
+// import ImageViewer from "../components/ImageViewer";
+
 const Container = styled.div`
   min-height: 100vh;
   width: 100%;
@@ -73,9 +75,14 @@ const Saved = () => {
       Saved: [],
     },
   ];
+  
   return (
     <Container>
-      <FeedList feeds={feeds} post={false} />
+      <ImageViewer>
+        {({ onImageClick }) => (
+          <FeedList feeds={feeds} post={false} onImageClick={onImageClick} />
+        )}
+      </ImageViewer>
     </Container>
   );
 };
