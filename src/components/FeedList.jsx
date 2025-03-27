@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import Feed from "./Feed";
-import Post from "./Post";
+import Post from "./CreatePost";
 import { useSelector } from "react-redux";
 
 const Container = styled.div`
   width: 100%;
   max-width: 680px;
+  
 `;
 
 //  Options are "friendlist" or "own" or "saved".

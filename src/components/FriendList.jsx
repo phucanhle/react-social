@@ -1,22 +1,54 @@
 import styled from "styled-components";
 import { memo, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
 const Container = styled.div`
     position: fixed;
     max-height: calc(100vh - 50px - 40px);
     width: 100%;
     max-width: 340px;
-    border-radius: 12px;
+    border-radius: 16px;
     padding: 20px 0;
     margin: 0 10px;
     z-index: 2;
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+
+    &:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    }
 
     & h3 {
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
-        margin: 0 20px 10px;
+        margin: 0 20px 16px;
+        color: #1a1a1a;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        &::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 18px;
+            background-color: #0d7c66;
+            border-radius: 2px;
+        }
+    }
+
+    @media screen and (max-width: 1024px) {
+        max-width: 280px;
+        padding: 16px 0;
+
+        & h3 {
+            font-size: 16px;
+            margin: 0 16px 12px;
+        }
     }
 `;
+
 const List = styled.ul`
     width: 100%;
     height: 100%;
@@ -25,106 +57,164 @@ const List = styled.ul`
     overflow-x: hidden;
 
     &::-webkit-scrollbar {
-        width: 0px;
-        background: transparent;
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #0d7c66;
+        border-radius: 3px;
     }
 `;
 
 const ItemContainer = styled.li`
     width: 100%;
-    margin: 10px 0;
-    padding: 5px 10px;
+    margin: 8px 0;
+    padding: 8px 12px;
     border-radius: 12px;
-
     display: flex;
     position: relative;
     align-items: center;
     cursor: pointer;
+    transition: all 0.2s ease;
+
     &:hover {
-        background-color: #e4e6e9;
+        background-color: #f0f2f5;
+        transform: translateX(4px);
     }
+
     & > img {
         position: relative;
         aspect-ratio: 1 / 1;
         object-fit: cover;
-        width: 40px;
-        border-radius: 100px;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        border: 2px solid #f0f2f5;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
     }
 
     & p {
-        font-size: 14px;
+        font-size: 15px;
         font-weight: 500;
-        margin: 5px 10px;
+        margin: 0 12px;
+        color: #1a1a1a;
     }
 
     &:after {
-        background-color: green;
+        background-color: #0d7c66;
         content: " ";
         width: 10px;
         height: 10px;
         position: absolute;
         z-index: 3;
-        top: 10px;
-        right: 10px;
+        top: 50%;
+        right: 12px;
+        transform: translateY(-50%);
         border-radius: 50%;
+        border: 2px solid white;
+        box-shadow: 0 0 0 2px #0d7c66;
+    }
+
+    @media screen and (max-width: 1024px) {
+        padding: 6px 10px;
+
+        & > img {
+            width: 36px;
+            height: 36px;
+        }
+
+        & p {
+            font-size: 14px;
+            margin: 0 8px;
+        }
     }
 `;
-const Popup = styled.div`
-    width: 240px;
-    height: 160px;
-    position: absolute;
 
+const Popup = styled.div`
+    width: 280px;
+    height: 180px;
+    position: absolute;
     bottom: 50px;
     left: 80px;
     z-index: 5;
-    border-radius: 10px;
-    background-color: #ffffff;
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
-    transition: all 0.4s ease;
+    border-radius: 16px;
+    background-color: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+    overflow: hidden;
 
     & > img {
-        border-radius: 10px 10px 0 0;
+        border-radius: 16px 16px 0 0;
         width: 100%;
         height: 50%;
         object-fit: cover;
     }
+
+    & p {
+        padding: 12px;
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+        color: #1a1a1a;
+    }
+
     & .actions {
         width: 100%;
         display: flex;
         justify-content: space-between;
-        padding: 10px;
-        gap: 10px;
+        padding: 12px;
+        gap: 8px;
 
         & button {
-            width: 50%;
-            padding: 7px 0;
+            flex: 1;
+            padding: 8px 16px;
             font-size: 14px;
             font-weight: 500;
             background: none;
-            border-radius: 5px;
-            border: 1px solid #7eacb5;
+            border-radius: 8px;
+            border: 1px solid #0d7c66;
             cursor: pointer;
-            transition: background 0.4s ease;
+            transition: all 0.2s ease;
+
             &.primary {
-                background-color: #005c78;
+                background-color: #0d7c66;
                 color: white;
                 border: none;
+
                 &:hover {
-                    background-color: #16325b;
-                    color: white;
+                    background-color: #0b6b56;
+                    transform: translateY(-1px);
                 }
             }
+
             &:hover {
-                background-color: #7eacb5;
-                color: white;
+                background-color: #f0f2f5;
+                transform: translateY(-1px);
             }
+
             & a {
                 color: inherit;
                 text-decoration: none;
+                display: block;
+                text-align: center;
             }
         }
     }
+
+    @media screen and (max-width: 1024px) {
+        display: none;
+    }
 `;
+
 const FriendList = ({ onFriendSelect }) => {
     const listFriend = [
         {
@@ -219,6 +309,7 @@ const FriendList = ({ onFriendSelect }) => {
         },
     ];
     const [hoveredIndex, setHoveredIndex] = useState(null);
+    const navigate = useNavigate();
 
     const handleMouseEnter = (index) => {
         setHoveredIndex(index);
@@ -228,6 +319,14 @@ const FriendList = ({ onFriendSelect }) => {
         setHoveredIndex(null);
     };
 
+    const handleFriendClick = (friend) => {
+        if (window.innerWidth <= 1024) {
+            navigate('/chat', { state: { selectedFriend: friend } });
+        } else {
+            onFriendSelect(friend);
+        }
+    };
+
     return (
         <Container>
             <h3>Bạn bè ({listFriend.length})</h3>
@@ -235,12 +334,12 @@ const FriendList = ({ onFriendSelect }) => {
                 {listFriend.map((item, index) => (
                     <ItemContainer
                         key={index}
-                        onClick={() => onFriendSelect(item)}
+                        onClick={() => handleFriendClick(item)}
                         onMouseEnter={() => handleMouseEnter(index)}
                     >
                         <img src={item.avatar} alt={`avatar-of-${item.name}`} />
                         <p>{item.name}</p>
-                        {hoveredIndex === index && (
+                        {hoveredIndex === index && window.innerWidth > 1024 && (
                             <Popup style={{ top: index >= 4 ? "" : "10px" }}>
                                 <img
                                     src={item.avatar}

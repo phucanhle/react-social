@@ -1,105 +1,171 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 import { createSelector } from "reselect";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
+import { useLocation } from "react-router-dom";
 import FriendList from "../components/FriendList";
-import MessageList from "../components/MessageList"; // Import MessageList
+import MessageList from "../components/MessageList";
 
 const Container = styled.div`
     min-height: 100vh;
     width: 100%;
+    max-width: 1440px;
     margin: 0 auto;
-    padding: 50px 0 0;
+    padding: 80px 24px 24px;
+    // background-color: #f0f2f5;
 `;
 
 const History = styled.div`
     display: grid;
-    padding: 5px;
-    grid-template-columns: 1fr 4fr;
-    gap: 20px;
+    grid-template-columns: 340px 1fr;
+    gap: 24px;
+    height: calc(100vh - 104px);
+ 
+    overflow: hidden;
+
     @media screen and (max-width: 820px) {
         grid-template-columns: 1fr;
+        height: calc(100vh - 104px);
     }
 `;
 
 const Content = styled.div`
     height: 100%;
-    min-height: calc(100vh - 90px);
-    width: 100%;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    max-height: 100vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 `;
 
 const ChatHeader = styled.div`
     width: 100%;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: 600;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f0f2f5;
     display: flex;
     justify-content: space-between;
     align-items: center;
+   
+
+    & h2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+
+        &::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 18px;
+            background-color: #0d7c66;
+            border-radius: 2px;
+        }
+    }
 `;
 
 const ChatInputContainer = styled.div`
     display: flex;
-    border-top: 1px solid #eee;
-    padding: 20px 10px;
+    gap: 12px;
+    padding: 20px 24px;
+    border-top: 1px solid #f0f2f5;
+
 `;
 
 const ChatInput = styled.input`
     flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    margin-right: 10px;
-    outline: none;
+    padding: 12px 16px;
+    border: 1px solid #e4e6eb;
+    border-radius: 12px;
     font-size: 14px;
-    font-family: inherit;
+    color: #1a1a1a;
+    background-color: #f0f2f5;
+    transition: all 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #0d7c66;
+        background-color: white;
+        box-shadow: 0 0 0 2px rgba(13, 124, 102, 0.1);
+    }
+
+    &::placeholder {
+        color: #65676b;
+    }
 `;
 
 const SendButton = styled.button`
-    padding: 10px 30px;
-    background-color: #007bff;
+    padding: 12px 24px;
+    background-color: #0d7c66;
     color: white;
     border: none;
     font-size: 14px;
-    font-family: inherit;
-    border-radius: 10px;
+    font-weight: 500;
+    border-radius: 12px;
     cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 
     &:hover {
-        background-color: #0056b3;
+        background-color: #0b6b56;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(13, 124, 102, 0.2);
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    & svg {
+        width: 20px;
+        height: 20px;
     }
 `;
 
 const ToggleFriendListButton = styled.button`
     display: none;
-    padding: 10px;
-    background-color: #007bff;
-    color: white;
+    padding: 8px 16px;
+    background-color: #f0f2f5;
+    color: #1a1a1a;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
     cursor: pointer;
-    margin-bottom: 20px;
+    transition: all 0.2s ease;
 
     &:hover {
-        background-color: #0056b3;
+        background-color: #e4e6eb;
+        transform: translateY(-1px);
+    }
+
+    &:active {
+        transform: translateY(0);
     }
 
     @media screen and (max-width: 820px) {
-        display: block;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 `;
+
 const Overlay = styled.label`
     position: fixed;
-    width: 370px;
-    height: 100vh;
-    background: #f0f2f5;
-    border-radius: 10px;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 100;
 `;
 
 const userSelector = createSelector(
@@ -109,26 +175,78 @@ const userSelector = createSelector(
 
 const Chat = () => {
     const user = useSelector(userSelector);
-    const [currentChatFriend, setCurrentChatFriend] = useState(null);
+    const location = useLocation();
+    const [currentChatFriend, setCurrentChatFriend] = useState(location.state?.selectedFriend || null);
     const [messages, setMessages] = useState({});
     const [newMessage, setNewMessage] = useState("");
-    const [isFriendListVisible, setIsFriendListVisible] = useState(true);
+    const [isFriendListVisible, setIsFriendListVisible] = useState(window.innerWidth > 820);
+    const [isTyping, setIsTyping] = useState(false);
+    const [lastSeen, setLastSeen] = useState({});
 
-    const handleSendMessage = () => {
+    // Memoize handlers
+    const handleSendMessage = useCallback(() => {
         if (newMessage.trim() !== "" && currentChatFriend) {
+            const timestamp = new Date().toISOString();
             const friendMessages = messages[currentChatFriend.id] || [];
-            setMessages({
-                ...messages,
-                [currentChatFriend.id]: [...friendMessages, { text: newMessage, isUser: true }],
-            });
+            const newMessageObj = {
+                id: Date.now(),
+                text: newMessage,
+                isUser: true,
+                timestamp,
+                isRead: false
+            };
+
+            setMessages(prev => ({
+                ...prev,
+                [currentChatFriend.id]: [...friendMessages, newMessageObj],
+            }));
             setNewMessage("");
+            setIsTyping(false);
         }
-    };
+    }, [newMessage, currentChatFriend, messages]);
 
-    const handleFriendSelect = (friend) => {
+    const handleFriendSelect = useCallback((friend) => {
         setCurrentChatFriend(friend);
-    };
+        // Đánh dấu tin nhắn đã đọc khi chọn bạn bè
+        if (messages[friend.id]) {
+            setMessages(prev => ({
+                ...prev,
+                [friend.id]: prev[friend.id].map(msg => ({
+                    ...msg,
+                    isRead: true
+                }))
+            }));
+        }
+    }, [messages]);
 
+    const handleTyping = useCallback(() => {
+        setIsTyping(true);
+        // Giả lập người dùng đang nhập
+        setTimeout(() => {
+            setIsTyping(false);
+        }, 2000);
+    }, []);
+
+    // Memoize current chat messages
+    const currentChatMessages = useMemo(() => {
+        return currentChatFriend ? messages[currentChatFriend.id] || [] : [];
+    }, [currentChatFriend, messages]);
+
+    // Update last seen
+    useEffect(() => {
+        if (currentChatFriend) {
+            const interval = setInterval(() => {
+                setLastSeen(prev => ({
+                    ...prev,
+                    [currentChatFriend.id]: new Date().toISOString()
+                }));
+            }, 30000); // Cập nhật mỗi 30 giây
+
+            return () => clearInterval(interval);
+        }
+    }, [currentChatFriend]);
+
+    // Handle window resize
     useEffect(() => {
         const handleResize = () => {
             if (window.innerWidth > 820) {
@@ -146,55 +264,134 @@ const Chat = () => {
         };
     }, []);
 
+    // Update currentChatFriend when location state changes
+    useEffect(() => {
+        if (location.state?.selectedFriend) {
+            setCurrentChatFriend(location.state.selectedFriend);
+            // Clear location state after setting currentChatFriend
+            window.history.replaceState({}, document.title);
+        }
+    }, [location.state]);
+
     return (
         <Container>
             <History>
-                <div style={{ display: isFriendListVisible ? "block" : "none" }}>
-                    <FriendList onFriendSelect={handleFriendSelect} />
-                    <Overlay htmlFor="toggle"></Overlay>
+                <div style={{ 
+                    display: isFriendListVisible ? "block" : "none",
+                    borderRight: "1px solid #f0f2f5",
+                    height: "100%",
+                    overflow: "hidden"
+                }}>
+                    <FriendList 
+                        onFriendSelect={handleFriendSelect}
+                        lastSeen={lastSeen}
+                    />
                 </div>
                 <Content>
                     {currentChatFriend ? (
                         <>
                             <ChatHeader>
-                                <h2>{currentChatFriend.name}</h2>
+                                <div>
+                                    <h2>{currentChatFriend.name}</h2>
+                                    <span style={{ 
+                                        fontSize: "12px", 
+                                        color: "#65676b",
+                                        display: "block",
+                                        marginTop: "4px"
+                                    }}>
+                                        {lastSeen[currentChatFriend.id] ? 
+                                            `Hoạt động ${new Date(lastSeen[currentChatFriend.id]).toLocaleTimeString()}` : 
+                                            "Đang offline"}
+                                    </span>
+                                </div>
                                 <ToggleFriendListButton
-                                    aria-label={isFriendListVisible ? "Hide Friends" : "Show Friends"}
                                     onClick={() => setIsFriendListVisible(!isFriendListVisible)}
                                 >
-                                    {isFriendListVisible ? "Hide Friends" : "Show Friends"}
+                                    <svg
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke="currentColor"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M4 6h16M4 12h16M4 18h16"
+                                        />
+                                    </svg>
+                                    {isFriendListVisible ? "Ẩn danh sách" : "Hiện danh sách"}
                                 </ToggleFriendListButton>
                             </ChatHeader>
-                            <MessageList messages={messages[currentChatFriend.id] || []} />
+                            <MessageList 
+                                messages={currentChatMessages}
+                                isTyping={isTyping}
+                            />
                             <ChatInputContainer>
                                 <ChatInput
                                     type="text"
-                                    placeholder="Type a message..."
+                                    placeholder="Nhập tin nhắn..."
                                     value={newMessage}
-                                    onChange={(e) => setNewMessage(e.target.value)}
+                                    onChange={(e) => {
+                                        setNewMessage(e.target.value);
+                                        handleTyping();
+                                    }}
                                     onKeyPress={(e) => e.key === "Enter" && handleSendMessage()}
                                 />
-                                <SendButton onClick={handleSendMessage} aria-label="Send message">
-                                    Send
+                                <SendButton 
+                                    onClick={handleSendMessage}
+                                    disabled={!newMessage.trim()}
+                                >
+                                    <svg
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke="currentColor"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                            strokeWidth="2"
+                                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                                        />
+                                    </svg>
+                                    Gửi
                                 </SendButton>
                             </ChatInputContainer>
                         </>
                     ) : (
                         <ChatHeader>
-                            <p>Please select a friend to start chatting.</p>
+                            <h2>Chọn bạn bè để bắt đầu trò chuyện</h2>
                             <ToggleFriendListButton
-                                id="toggle"
-                                aria-label={isFriendListVisible ? "Hide Friends" : "Show Friends"}
                                 onClick={() => setIsFriendListVisible(!isFriendListVisible)}
                             >
-                                {isFriendListVisible ? "Hide Friends" : "Show Friends"}
+                                <svg
+                                    aria-hidden="true"
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke="currentColor"
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        strokeWidth="2"
+                                        d="M4 6h16M4 12h16M4 18h16"
+                                    />
+                                </svg>
+                                {isFriendListVisible ? "Ẩn danh sách" : "Hiện danh sách"}
                             </ToggleFriendListButton>
                         </ChatHeader>
                     )}
                 </Content>
             </History>
+            {isFriendListVisible && window.innerWidth <= 820 && (
+                <Overlay onClick={() => setIsFriendListVisible(false)} />
+            )}
         </Container>
     );
 };
 
-export default Chat;
+export default React.memo(Chat);

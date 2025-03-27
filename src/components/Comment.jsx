@@ -1,4 +1,6 @@
+import { useState, forwardRef, useCallback } from "react";
 import styled from "styled-components";
+import { useTranslation } from "../hooks/useTranslation";
 
 const Container = styled.div`
     width: 100%;
@@ -62,33 +64,106 @@ const Container = styled.div`
     }
 `;
 
-const Comment = () => {
+const Comment = forwardRef(({ onSubmit, onCancel }, ref) => {
+    const [commentText, setCommentText] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [error, setError] = useState("");
+    const { t } = useTranslation();
+
+    const handleSubmit = useCallback(async (e) => {
+        e.preventDefault();
+        if (!commentText.trim() || isSubmitting) return;
+
+        setIsSubmitting(true);
+        setError("");
+
+        try {
+            await onSubmit(commentText);
+            setCommentText("");
+            if (onCancel) onCancel();
+        } catch (error) {
+            setError(t('comment.commentError'));
+            console.error("Lỗi khi gửi bình luận:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }, [commentText, isSubmitting, onSubmit, onCancel, t]);
+
+    const handleKeyPress = useCallback((e) => {
+        if (e.key === "Enter" && !e.shiftKey) {
+            e.preventDefault();
+            handleSubmit(e);
+        }
+    }, [handleSubmit]);
+
+    const handleCancel = useCallback(() => {
+        setCommentText("");
+        setError("");
+        if (onCancel) onCancel();
+    }, [onCancel]);
+
     return (
-        <Container>
+        <Container as="form" onSubmit={handleSubmit}>
             <input 
+                ref={ref}
                 type="text" 
-                placeholder="Viết bình luận..." 
+                placeholder={t('comment.writeComment')}
+                value={commentText}
+                onChange={(e) => {
+                    setCommentText(e.target.value);
+                    setError("");
+                }}
+                onKeyPress={handleKeyPress}
+                disabled={isSubmitting}
             />
-            <button>
-                <svg
-                    class="w-5 h-5"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
+            <div style={{ display: "flex", gap: "8px" }}>
+                <button 
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={isSubmitting}
+                    style={{ 
+                        backgroundColor: "#e4e6eb",
+                        color: "#65676b"
+                    }}
                 >
-                    <path
-                        stroke="currentColor"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                        stroke-width="2"
-                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
-                    />
-                </svg>
-                Gửi
-            </button>
+                    {t('common.cancel')}
+                </button>
+                <button 
+                    type="submit" 
+                    disabled={!commentText.trim() || isSubmitting}
+                >
+                    <svg
+                        className="w-5 h-5"
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                        />
+                    </svg>
+                    {isSubmitting ? t('common.sending') : t('common.send')}
+                </button>
+            </div>
+            {error && (
+                <div style={{ 
+                    color: "#dc2626", 
+                    fontSize: "12px", 
+                    marginTop: "4px",
+                    width: "100%"
+                }}>
+                    {error}
+                </div>
+            )}
         </Container>
     );
-};
+});
+
+Comment.displayName = "Comment";
 
 export default Comment;

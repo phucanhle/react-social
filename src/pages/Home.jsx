@@ -8,73 +8,134 @@ const Banner = lazy(() => import("../components/Banner"));
 
 const Article = styled.article`
     width: 100%;
-    padding-top: 50px;
+    max-width: 1440px;
+    min-height: 100vh;
+    padding-top: 60px;
+    margin: 20px auto;
     display: grid;
-    grid-template-columns: 25% 50% 25%;
+    grid-template-columns: 300px 1fr 300px;
+    gap: 24px;
+    background-color: #f0f2f5;
 
-    @media screen and (max-width: 898px) {
-        grid-template-columns: 100%;
-        padding: 50px 20px;
+    @media screen and (max-width: 1200px) {
+        grid-template-columns: 1fr 300px;
+        padding: 60px 16px 24px;
+        gap: 16px;
+
+        & > div:first-child {
+            display: none;
+        }
     }
 
-    @media screen and (min-width: 899px) and (max-width: 1098px) {
-        padding: 50px 20px;
-        grid-template-columns: 70% 30%;
+    @media screen and (max-width: 768px) {
+        grid-template-columns: 1fr;
+        padding: 60px 12px 16px;
+        gap: 12px;
+
+        & > div:last-child {
+            display: none;
+        }
     }
 `;
 
 const LeftDiv = styled.div`
-    position: relative;
+    position: sticky;
+    top: 76px;
+    height: fit-content;
     width: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: end;
-    @media screen and (max-width: 1098px) {
-        display: none;
+    max-width: 300px;
+
+    @media screen and (max-width: 768px) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        top: auto;
+        width: 100%;
+        max-width: 100%;
+        z-index: 100;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 16px 16px 0 0;
+        padding: 12px 0;
     }
 `;
 
 const MiddleDiv = styled.div`
-    position: relative;
-    padding: 20px 0;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    gap: 24px;
+
+    @media screen and (max-width: 768px) {
+        max-width: 100%;
+        gap: 16px;
+        padding-bottom: 80px;
+    }
 `;
 
 const RightDiv = styled.div`
-    position: relative;
+    position: sticky;
+    top: 76px;
+    height: fit-content;
     width: 100%;
-    padding: 20px;
-    display: flex;
-    justify-content: start;
-    screen and (max-width: 898px) {
-        display: none;
+    max-width: 300px;
+
+    @media screen and (max-width: 768px) {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        top: auto;
+        width: 100%;
+        max-width: 100%;
+        z-index: 100;
+        background: white;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 16px 16px 0 0;
+        padding: 12px 0;
     }
-`; // Define the keyframes outside of the component
-const rotation = keyframes`
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
 `;
 
-// Styled component with fixed keyframe reference
+const rotation = keyframes`
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+`;
+
 const Loading = styled.div`
     width: 48px;
     height: 48px;
-    border: 5px solid #fff;
+    border: 5px solid #0d7c66;
     border-bottom-color: transparent;
     border-radius: 50%;
     display: inline-block;
     box-sizing: border-box;
     animation: ${rotation} 1s linear infinite;
+
+    @media screen and (max-width: 768px) {
+        width: 36px;
+        height: 36px;
+        border-width: 4px;
+    }
 `;
-const FallbackComponent = () => <Loading />;
+
+const FallbackComponent = () => (
+    <div style={{ 
+        display: 'flex', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        minHeight: '200px',
+        padding: '16px'
+    }}>
+        <Loading />
+    </div>
+);
 
 const HomePage = () => {
-    // Temporary array for the list of the first 10 posts, concatenated at the backend.
     const feeds = [
         {
             postid: 1,
@@ -92,36 +153,36 @@ const HomePage = () => {
         {
             postid: 2,
             user: {
-                avatar: "https://i.pinimg.com/564x/94/68/5c/94685c60484e97f582707a69bb5613e3.jpg",
+                avatar: "https://plus.unsplash.com/premium_photo-1670282393321-b34c6a4695b0",
                 name: "Trần Thị B",
             },
             content: "Món ăn mới làm hôm nay",
             imgSrc: [
-                "https://i.pinimg.com/564x/02/ba/65/02ba65e0f3b88a0f679f6f1e0b9b4a59.jpg",
-                "https://i.pinimg.com/564x/61/7d/ef/617def7d58f1daa7ea9cc127af8bb1c0.jpg"
+                "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+                "https://images.unsplash.com/photo-1529692236671-f1f6cf9683ba"
             ],
         },
         {
             postid: 3,
             user: {
-                avatar: "https://i.pinimg.com/564x/1e/90/7f/1e907f17d3f4a5677377f2823d338e51.jpg",
+                avatar: "https://images.unsplash.com/photo-1463453091185-61582044d556",
                 name: "Lê Văn C",
             },
             content: "Buổi tập gym hôm nay", 
             imgSrc: [
-                "https://i.pinimg.com/564x/0e/78/a5/0e78a5a9c7d93c6acc8a9a5b5d3712c4.jpg"
+                "https://images.unsplash.com/photo-1517836357463-d25dfeac3438?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
             ],
         },
         {
             postid: 4,
             user: {
-                avatar: "https://i.pinimg.com/564x/d8/2a/d6/d82ad6d4d6f7b51dba6c0c0794cd003d.jpg",
+                avatar: "https://plus.unsplash.com/premium_photo-1673792686366-27a26e9d5ea5",
                 name: "Phạm Thị D",
             },
             content: "Sách hay nên đọc",
             imgSrc: [
-                "https://i.pinimg.com/564x/f1/86/51/f18651eeb6600f8c68299936d1d61db5.jpg",
-                "https://i.pinimg.com/564x/e9/b5/fb/e9b5fb8676f7dd4d2ca1e0315cd8c676.jpg"
+                "https://images.unsplash.com/photo-1512820790803-83ca734da794",
+                "https://images.unsplash.com/photo-1612969308146-066d55f37ccb"
             ],
         },
     ];
@@ -131,7 +192,6 @@ const HomePage = () => {
             <LeftDiv>
                 <Suspense fallback={<FallbackComponent />}>
                     <FeatureList />
-              
                 </Suspense>
             </LeftDiv>
             <MiddleDiv>
@@ -147,4 +207,5 @@ const HomePage = () => {
         </Article>
     );
 };
+
 export default HomePage;

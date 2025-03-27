@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import styled from "styled-components";
 import upload from "../assets/image-upload.png";
 import { useDispatch } from "react-redux";
 import { addPost } from "../redux/postSlice";
+import { useTranslation } from "../hooks/useTranslation";
 
 const Container = styled.div`
     width: 100%;
@@ -197,15 +198,16 @@ const ErrorMessage = styled.div`
     }
 `;
 
-const CreatePost = ({ user }) => {
+const CreatePost = memo(({ user }) => {
     const { username, avatar } = user;
     const [file, setFile] = useState(null);
     const [error, setError] = useState("");
     const [content, setContent] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const dispatch = useDispatch();
+    const { t, currentLanguage } = useTranslation();
 
-    const handleFileInput = (e) => {
+    const handleFileInput = useCallback((e) => {
         const selectedFile = e.target.files[0];
         if (!selectedFile) return;
 
@@ -214,71 +216,68 @@ const CreatePost = ({ user }) => {
         const isVideo = fileType.startsWith('video/');
 
         if (!isImage && !isVideo) {
-            setError("Chỉ cho phép upload hình ảnh hoặc video!");
+            setError(t('post.fileError'));
             setFile(null);
             return;
         }
 
         const maxSize = 50 * 1024 * 1024;
         if (selectedFile.size > maxSize) {
-            setError("File không được vượt quá 50MB!");
+            setError(t('post.fileSizeError'));
             setFile(null);
             return;
         }
 
         setError("");
         setFile(selectedFile);
-    };
+    }, [t]);
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = useCallback(async (e) => {
         e.preventDefault();
-        if (!content.trim() && !file) {
-            setError("Vui lòng nhập nội dung hoặc chọn file!");
-            return;
-        }
+        if (!content.trim() && !file) return;
 
         setIsLoading(true);
         try {
-            // Tạo URL cho file preview
-            const fileUrl = file ? URL.createObjectURL(file) : null;
-            
-            // Tạo post mới
-            const newPost = {
-                postid: Date.now(), // Tạm thời dùng timestamp làm id
+            // TODO: Implement post creation logic
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            dispatch(addPost({
+                id: Date.now(),
                 user: {
-                    name: username,
-                    avatar: avatar
+                    username,
+                    avatar
                 },
-                content: content.trim(),
-                imgSrc: fileUrl ? [fileUrl] : [],
-                createdAt: new Date().toISOString(),
-                likes: 0,
-                comments: []
-            };
-
-            // Thêm post vào Redux store
-            dispatch(addPost(newPost));
-
-            // Reset form
+                content,
+                file: file ? URL.createObjectURL(file) : null,
+                timestamp: new Date().toISOString()
+            }));
             setContent("");
             setFile(null);
             setError("");
-        } catch (err) {
-            setError("Có lỗi xảy ra khi đăng bài!");
+        } catch (error) {
+            setError(t('post.postError'));
+            console.error("Error creating post:", error);
         } finally {
             setIsLoading(false);
         }
-    };
+    }, [content, file, username, avatar, dispatch, t]);
+
+    const handleContentChange = useCallback((e) => {
+        setContent(e.target.value);
+    }, []);
+
+    const handleFileRemove = useCallback(() => {
+        setFile(null);
+    }, []);
 
     return (
         <Container>
-            <Title>Đăng bài</Title>
+            <Title>{t('post.newPost')}</Title>
             <form onSubmit={handleSubmit}>
                 <Input 
                     type="text" 
-                    placeholder={`${username}, cập nhật trạng thái nào...`}
+                    placeholder={`${username}, ${t('post.whatOnMind')}`}
                     value={content}
-                    onChange={(e) => setContent(e.target.value)}
+                    onChange={handleContentChange}
                     disabled={isLoading}
                 />
                 <Input 
@@ -299,7 +298,10 @@ const CreatePost = ({ user }) => {
                                     controls 
                                 />
                             )}
-                            <button type="button" onClick={() => setFile(null)}>
+                            <button 
+                                type="button"
+                                onClick={handleFileRemove}
+                            >
                                 <svg
                                     aria-hidden="true"
                                     xmlns="http://www.w3.org/2000/svg"
@@ -321,11 +323,13 @@ const CreatePost = ({ user }) => {
                     )}
                 </FilePreview>
                 <Button type="submit" disabled={isLoading}>
-                    {isLoading ? "Đang đăng..." : "Đăng bài"}
+                    {isLoading ? t('common.sending') : t('common.send')}
                 </Button>
             </form>
         </Container>
     );
-};
+});
+
+CreatePost.displayName = "CreatePost";
 
 export default CreatePost;
