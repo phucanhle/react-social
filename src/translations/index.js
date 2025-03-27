@@ -33,7 +33,22 @@ export const translations = {
             online: "Đang online",
             hideList: "Ẩn danh sách",
             showList: "Hiện danh sách",
-            selectFriend: "Chọn bạn bè để bắt đầu trò chuyện"
+            selectFriend: "Chọn bạn bè để bắt đầu trò chuyện",
+            follow: "Theo dõi",
+            unfollow: "Bỏ theo dõi",
+            followers: "Người theo dõi",
+            following: "Đang theo dõi",
+            message: "Nhắn tin",
+            block: "Chặn",
+            unblock: "Bỏ chặn",
+            report: "Báo cáo",
+            share: "Chia sẻ",
+            save: "Lưu",
+            unsave: "Bỏ lưu",
+            edit: "Chỉnh sửa",
+            delete: "Xóa",
+            more: "Thêm",
+            less: "Bớt"
         },
         post: {
             createPost: "Đăng bài",
@@ -65,7 +80,9 @@ export const translations = {
             postError: "Có lỗi xảy ra khi đăng bài. Vui lòng thử lại!",
             deleteConfirm: "Bạn có chắc chắn muốn xóa bài viết này?",
             yes: "Có",
-            no: "Không"
+            no: "Không",
+            viewMoreComments: "Xem thêm {count} bình luận",
+            loadMoreComments: "Xem thêm bình luận"
         },
         comment: {
             writeComment: "Viết bình luận...",
@@ -86,6 +103,33 @@ export const translations = {
             loading: "Đang tải...",
             noPosts: "Chưa có bài viết nào",
             createFirstPost: "Tạo bài viết đầu tiên"
+        },
+        menu: {
+            profile: "Trang cá nhân",
+            notifications: "Thông báo",
+            friends: "Bạn bè",
+            chat: "Chat",
+            discussion: "Thảo luận",
+            events: "Sự kiện",
+            search: "Tìm kiếm",
+            saved: "Đã lưu",
+            settings: "Cài đặt",
+            logout: "Đăng xuất"
+        },
+        friendList: {
+            title: "Bạn bè",
+            message: "Nhắn tin",
+            profile: "Trang cá nhân",
+            friendCount: "Bạn bè ({count})",
+            noFriends: "Chưa có bạn bè nào",
+            searchFriends: "Tìm kiếm bạn bè...",
+            online: "Đang online",
+            offline: "Đang offline",
+            lastSeen: "Hoạt động {time} trước",
+            addFriend: "Thêm bạn",
+            removeFriend: "Xóa bạn",
+            blockFriend: "Chặn bạn",
+            unblockFriend: "Bỏ chặn bạn"
         }
     },
     en: {
@@ -122,7 +166,22 @@ export const translations = {
             online: "Online",
             hideList: "Hide list",
             showList: "Show list",
-            selectFriend: "Select a friend to start chatting"
+            selectFriend: "Select a friend to start chatting",
+            follow: "Follow",
+            unfollow: "Unfollow",
+            followers: "Followers",
+            following: "Following",
+            message: "Message",
+            block: "Block",
+            unblock: "Unblock",
+            report: "Report",
+            share: "Share",
+            save: "Save",
+            unsave: "Unsave",
+            edit: "Edit",
+            delete: "Delete",
+            more: "More",
+            less: "Less"
         },
         post: {
             createPost: "Create Post",
@@ -154,7 +213,9 @@ export const translations = {
             postError: "An error occurred while creating the post. Please try again!",
             deleteConfirm: "Are you sure you want to delete this post?",
             yes: "Yes",
-            no: "No"
+            no: "No",
+            viewMoreComments: "View {count} more comments",
+            loadMoreComments: "Load more comments"
         },
         comment: {
             writeComment: "Write a comment...",
@@ -175,6 +236,33 @@ export const translations = {
             loading: "Loading...",
             noPosts: "No posts yet",
             createFirstPost: "Create your first post"
+        },
+        menu: {
+            profile: "Profile",
+            notifications: "Notifications",
+            friends: "Friends",
+            chat: "Chat",
+            discussion: "Discussion",
+            events: "Events",
+            search: "Search",
+            saved: "Saved",
+            settings: "Settings",
+            logout: "Logout"
+        },
+        friendList: {
+            title: "Friends",
+            message: "Message",
+            profile: "Profile",
+            friendCount: "Friends ({count})",
+            noFriends: "No friends yet",
+            searchFriends: "Search friends...",
+            online: "Online",
+            offline: "Offline",
+            lastSeen: "Last seen {time} ago",
+            addFriend: "Add friend",
+            removeFriend: "Remove friend",
+            blockFriend: "Block friend",
+            unblockFriend: "Unblock friend"
         }
     },
     ja: {
@@ -211,7 +299,22 @@ export const translations = {
             online: "オンライン",
             hideList: "リストを非表示",
             showList: "リストを表示",
-            selectFriend: "チャットを開始する友達を選択"
+            selectFriend: "チャットを開始する友達を選択",
+            follow: "フォロー",
+            unfollow: "フォロー解除",
+            followers: "フォロワー",
+            following: "フォロー中",
+            message: "メッセージ",
+            block: "ブロック",
+            unblock: "ブロック解除",
+            report: "報告",
+            share: "シェア",
+            save: "保存",
+            unsave: "保存解除",
+            edit: "編集",
+            delete: "削除",
+            more: "もっと見る",
+            less: "折りたたむ"
         },
         post: {
             createPost: "投稿を作成",
@@ -243,7 +346,9 @@ export const translations = {
             postError: "投稿の作成中にエラーが発生しました。もう一度お試しください！",
             deleteConfirm: "この投稿を削除してもよろしいですか？",
             yes: "はい",
-            no: "いいえ"
+            no: "いいえ",
+            viewMoreComments: "さらに{count}件のコメントを表示",
+            loadMoreComments: "コメントをさらに読み込む"
         },
         comment: {
             writeComment: "コメントを書く...",
@@ -264,6 +369,33 @@ export const translations = {
             loading: "読み込み中...",
             noPosts: "投稿はまだありません",
             createFirstPost: "最初の投稿を作成"
+        },
+        menu: {
+            profile: "プロフィール",
+            notifications: "通知",
+            friends: "友達",
+            chat: "チャット",
+            discussion: "ディスカッション",
+            events: "イベント",
+            search: "検索",
+            saved: "保存済み",
+            settings: "設定",
+            logout: "ログアウト"
+        },
+        friendList: {
+            title: "友達",
+            message: "メッセージ",
+            profile: "プロフィール",
+            friendCount: "友達 ({count})",
+            noFriends: "友達がいません",
+            searchFriends: "友達を検索...",
+            online: "オンライン",
+            offline: "オフライン",
+            lastSeen: "{time}前にアクセス",
+            addFriend: "友達を追加",
+            removeFriend: "友達を削除",
+            blockFriend: "友達をブロック",
+            unblockFriend: "ブロックを解除"
         }
     },
     ko: {
@@ -300,7 +432,22 @@ export const translations = {
             online: "온라인",
             hideList: "목록 숨기기",
             showList: "목록 보기",
-            selectFriend: "채팅을 시작하려면 친구를 선택하세요"
+            selectFriend: "채팅을 시작하려면 친구를 선택하세요",
+            follow: "팔로우",
+            unfollow: "팔로우 취소",
+            followers: "팔로워",
+            following: "팔로잉",
+            message: "메시지",
+            block: "차단",
+            unblock: "차단 해제",
+            report: "신고",
+            share: "공유",
+            save: "저장",
+            unsave: "저장 취소",
+            edit: "편집",
+            delete: "삭제",
+            more: "더 보기",
+            less: "접기"
         },
         post: {
             createPost: "게시물 작성",
@@ -332,7 +479,9 @@ export const translations = {
             postError: "게시물 작성 중 오류가 발생했습니다. 다시 시도해주세요!",
             deleteConfirm: "이 게시물을 삭제하시겠습니까?",
             yes: "예",
-            no: "아니오"
+            no: "아니오",
+            viewMoreComments: "댓글 {count}개 더 보기",
+            loadMoreComments: "댓글 더 보기"
         },
         comment: {
             writeComment: "댓글 작성...",
@@ -353,6 +502,33 @@ export const translations = {
             loading: "로딩 중...",
             noPosts: "아직 게시물이 없습니다",
             createFirstPost: "첫 게시물 작성하기"
+        },
+        menu: {
+            profile: "프로필",
+            notifications: "알림",
+            friends: "친구",
+            chat: "채팅",
+            discussion: "토론",
+            events: "이벤트",
+            search: "검색",
+            saved: "저장됨",
+            settings: "설정",
+            logout: "로그아웃"
+        },
+        friendList: {
+            title: "친구",
+            message: "메시지",
+            profile: "프로필",
+            friendCount: "친구 ({count})",
+            noFriends: "아직 친구가 없습니다",
+            searchFriends: "친구 검색...",
+            online: "온라인",
+            offline: "오프라인",
+            lastSeen: "{time} 전에 접속",
+            addFriend: "친구 추가",
+            removeFriend: "친구 삭제",
+            blockFriend: "친구 차단",
+            unblockFriend: "차단 해제"
         }
     }
 }; 

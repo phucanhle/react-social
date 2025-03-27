@@ -145,7 +145,41 @@ const FeatureList = () => {
                             d="M7 17v1a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1v-1a3 3 0 0 0-3-3h-4a3 3 0 0 0-3 3Zm8-9a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                         />
                     </svg>
-                    <Link to={"/personal"}>{t('navigation.profile')}</Link>
+                    <Link to={"/personal"}>{t('menu.profile')}</Link>
+                </li>
+                <li>
+                    <svg
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                    </svg>
+                    <Link to="/notifications">{t('menu.notifications')}</Link>
+                </li>
+                <li>
+                    <svg
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M17 20h5v-2a3 3 0 0 0-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 0 1 5.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 0 1 9.288 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM7 10a2 2 0 1 1-4 0 2 2 0 0 1 4 0Z"
+                        />
+                    </svg>
+                    <Link to="/friends">{t('menu.friends')}</Link>
                 </li>
                 <li>
                     <svg
@@ -161,7 +195,7 @@ const FeatureList = () => {
                             d="M4.5 17H4a1 1 0 0 1-1-1 3 3 0 0 1 3-3h1m0-3.05A2.5 2.5 0 1 1 9 5.5M19.5 17h.5a1 1 0 0 0 1-1 3 3 0 0 0-3-3h-1m0-3.05a2.5 2.5 0 1 0-2-4.45m.5 13.5h-7a1 1 0 0 1-1-1 3 3 0 0 1 3-3h3a3 3 0 0 1 3 3 1 1 0 0 1-1 1Zm-1-9.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0Z"
                         />
                     </svg>
-                    <Link to="/chat">{t('navigation.chat')}</Link>
+                    <Link to="/chat">{t('menu.chat')}</Link>
                 </li>
                 <li>
                     <svg
@@ -178,7 +212,41 @@ const FeatureList = () => {
                             d="M19 7h1v12a1 1 0 0 1-1 1h-2a1 1 0 0 1-1-1V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h11.5M7 14h6m-6 3h6m0-10h.5m-.5 3h.5M7 7h3v3H7V7Z"
                         />
                     </svg>
-                    <Link to="/">{t('navigation.discussion')}</Link>
+                    <Link to="/">{t('menu.discussion')}</Link>
+                </li>
+                <li>
+                    <svg
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                        />
+                    </svg>
+                    <Link to="/events">{t('menu.events')}</Link>
+                </li>
+                <li>
+                    <svg
+                        aria-hidden="true"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke="currentColor"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="m21 21-6-6m2-5a7 7 0 1 1-14 0 7 7 0 0 1 14 0Z"
+                        />
+                    </svg>
+                    <Link to="/search">{t('menu.search')}</Link>
                 </li>
                 <li>
                     <svg
@@ -195,7 +263,7 @@ const FeatureList = () => {
                             d="m17 21-5-4-5 4V3.889a.92.92 0 0 1 .244-.629.808.808 0 0 1 .59-.26h8.333a.81.81 0 0 1 .589.26.92.92 0 0 1 .244.63V21Z"
                         />
                     </svg>
-                    <Link to="saved">{t('navigation.saved')}</Link>
+                    <Link to="saved">{t('menu.saved')}</Link>
                 </li>
                 <li>
                     <svg
@@ -212,11 +280,11 @@ const FeatureList = () => {
                             d="M10 19H5a1 1 0 0 1-1-1v-1a3 3 0 0 1 3-3h2m10 1a3 3 0 0 1-3 3m3-3a3 3 0 0 0-3-3m3 3h1m-4 3a3 3 0 0 1-3-3m3 3v1m-3-4a3 3 0 0 1 3-3m-3 3h-1m4-3v-1m-2.121 1.879-.707-.707m5.656 5.656-.707-.707m-4.242 0-.707.707m5.656-5.656-.707.707M12 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
                         />
                     </svg>
-                    <Link to="/settings">{t('navigation.settings')}</Link>
+                    <Link to="/settings">{t('menu.settings')}</Link>
                 </li>
             </Features>
             <Button onClick={handleLogout}>
-                {t('navigation.logout')}
+                {t('menu.logout')}
             </Button>
         </Container>
     );

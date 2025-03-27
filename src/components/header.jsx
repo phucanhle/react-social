@@ -1,11 +1,23 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { useTranslation } from "../hooks/useTranslation";
+import { friendList } from "../mockdata/friendData";
 
 import FeatureList from "./FeatureList";
 import logo from "../assets/logo.png";
+
+const fadeIn = keyframes`
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+`;
 
 const Container = styled.header`
     position: fixed;
@@ -77,11 +89,17 @@ const SearchGroup = styled.div`
     width: 100%;
     max-width: 400px;
     margin: 0 24px;
+
+    @media screen and (max-width: 768px) {
+        max-width: 300px;
+        margin: 0 12px;
+    }
 `;
 
 const Input = styled.input`
     width: 100%;
     padding: 12px 20px;
+    padding-left: 48px;
     border-radius: 12px;
     border: 1px solid #e4e6eb;
     font-size: 14px;
@@ -101,6 +119,20 @@ const Input = styled.input`
     }
 `;
 
+const SearchIcon = styled.div`
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #65676b;
+    pointer-events: none;
+    transition: all 0.3s ease;
+
+    ${Input}:focus + & {
+        color: #0d7c66;
+    }
+`;
+
 const Result = styled.div`
     position: absolute;
     top: 100%;
@@ -113,6 +145,26 @@ const Result = styled.div`
     overflow: hidden;
     z-index: 1000;
     border: 1px solid rgba(0, 0, 0, 0.05);
+    animation: ${fadeIn} 0.2s ease-out;
+    max-height: 400px;
+    overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: #f0f2f5;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: #c1c1c1;
+        border-radius: 3px;
+    }
+
+    &::-webkit-scrollbar-thumb:hover {
+        background: #a8a8a8;
+    }
 
     & a {
         text-decoration: none;
@@ -132,6 +184,31 @@ const Result = styled.div`
             }
         }
     }
+`;
+
+const LoadingSpinner = styled.div`
+    width: 24px;
+    height: 24px;
+    border: 3px solid #f0f2f5;
+    border-top: 3px solid #0d7c66;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+
+    @keyframes spin {
+        0% { transform: translateY(-50%) rotate(0deg); }
+        100% { transform: translateY(-50%) rotate(360deg); }
+    }
+`;
+
+const NoResult = styled.div`
+    padding: 24px;
+    text-align: center;
+    color: #65676b;
+    font-size: 14px;
 `;
 
 const Items = styled.div`
@@ -250,8 +327,11 @@ const Header = () => {
     const [isOpenMenu, setIsOpenMenu] = useState(false);
     const [isMobile, setIsMobile] = useState(false);
     const [isTablet, setIsTablet] = useState(false);
+    const [searchInput, setSearchInput] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
+    const [searchResults, setSearchResults] = useState([]);
+    const searchRef = useRef(null);
     const user = useSelector((state) => state.auth.user);
-    const [searchInput, setSearchInput] = useState(null);
     const { t } = useTranslation();
 
     const checkScreenSize = () => {
@@ -259,8 +339,25 @@ const Header = () => {
         setIsTablet(window.innerWidth > 768 && window.innerWidth <= 1024);
     };
 
-    const handleInputSearch = (value) => {
+    const handleInputSearch = async (value) => {
         setSearchInput(value);
+        setIsLoading(true);
+        
+        try {
+            // Giả lập API call
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Lọc kết quả tìm kiếm từ danh sách bạn bè
+            const filteredResults = friendList.filter(friend => 
+                friend.name.toLowerCase().includes(value.toLowerCase())
+            );
+            
+            setSearchResults(filteredResults);
+        } catch (error) {
+            console.error("Search error:", error);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -269,6 +366,18 @@ const Header = () => {
         return () => {
             window.removeEventListener("resize", checkScreenSize);
         };
+    }, []);
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchRef.current && !searchRef.current.contains(event.target)) {
+                setSearchInput("");
+                setSearchResults([]);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     const handleToggleMenu = () => {
@@ -286,35 +395,39 @@ const Header = () => {
                         <p>Hollow Knight</p>
                     </Link>
                 </h1>
-                <SearchGroup>
+                <SearchGroup ref={searchRef}>
                     <Input
                         type="search"
                         placeholder={t('common.search')}
+                        value={searchInput}
                         onChange={(e) => handleInputSearch(e.target.value)}
                     />
+                    <SearchIcon>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <circle cx="11" cy="11" r="8"></circle>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                        </svg>
+                    </SearchIcon>
+                    {isLoading && <LoadingSpinner />}
                     {searchInput && (
                         <Result>
-                            <Link to="/id">
-                                <Items>
-                                    <img
-                                        src="https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain"
-                                        alt=""
-                                    />
-                                    <p>Name</p>
-                                </Items>
-                            </Link>
-                            <Link to="/id">
-                                <Items>
-                                    <img
-                                        src="https://th.bing.com/th/id/OIP.QjynegEfQVPq5kIEuX9fWQHaFj?rs=1&pid=ImgDetMain"
-                                        alt=""
-                                    />
-                                    <p>Name</p>
-                                </Items>
-                            </Link>
-                            <Link to="/search" className="more">
-                                {t('common.seeMore')}
-                            </Link>
+                            {searchResults.length > 0 ? (
+                                <>
+                                    {searchResults.map(result => (
+                                        <Link key={result.id} to={`/user/${result.id}`}>
+                                            <Items>
+                                                <img src={result.avatar} alt={result.name} />
+                                                <p>{result.name}</p>
+                                            </Items>
+                                        </Link>
+                                    ))}
+                                    <Link to="/search" className="more">
+                                        {t('common.seeMore')}
+                                    </Link>
+                                </>
+                            ) : (
+                                <NoResult>{t('common.noResults')}</NoResult>
+                            )}
                         </Result>
                     )}
                 </SearchGroup>

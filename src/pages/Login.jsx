@@ -127,35 +127,19 @@ const Button = styled.button`
     cursor: pointer;
     transition: all 0.2s ease;
     margin-bottom: 16px;
+    background-color: ${props => props.$primary ? '#0d7c66' : 'transparent'};
+    color: ${props => props.$primary ? 'white' : '#0d7c66'};
+    border: ${props => props.$primary ? 'none' : '1px solid #0d7c66'};
 
-    ${props => props.primary ? `
-        background-color: #0d7c66;
-        color: white;
-        border: none;
+    &:hover {
+        background-color: ${props => props.$primary ? '#0b6b56' : '#f0f2f5'};
+        transform: translateY(-1px);
+        box-shadow: ${props => props.$primary ? '0 4px 12px rgba(13, 124, 102, 0.2)' : 'none'};
+    }
 
-        &:hover {
-            background-color: #0b6b56;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px rgba(13, 124, 102, 0.2);
-        }
-
-        &:active {
-            transform: translateY(0);
-        }
-    ` : `
-        background-color: transparent;
-        color: #0d7c66;
-        border: 1px solid #0d7c66;
-
-        &:hover {
-            background-color: #f0f2f5;
-            transform: translateY(-1px);
-        }
-
-        &:active {
-            transform: translateY(0);
-        }
-    `}
+    &:active {
+        transform: translateY(0);
+    }
 `;
 
 const HomePage = () => {
@@ -228,7 +212,7 @@ const HomePage = () => {
                             {error}
                         </div>
                     )}
-                    <Button primary onClick={handleLogin}>
+                    <Button $primary onClick={handleLogin}>
                         Đăng nhập
                     </Button>
                     <div className="links">
@@ -278,7 +262,7 @@ const HomePage = () => {
                             {error}
                         </div>
                     )}
-                    <Button primary onClick={handleRegister}>
+                    <Button $primary onClick={handleRegister}>
                         Đăng ký
                     </Button>
                     <div className="links">

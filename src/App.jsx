@@ -12,14 +12,22 @@ const Personal = lazy(() => import("./pages/Personal"));
 const Chat = lazy(() => import("./pages/Chat"));
 const Saved = lazy(() => import("./pages/Saved"));
 const Settings = lazy(() => import("./pages/Settings"));
+const UserProfile = lazy(() => import("./pages/UserProfile"));
+const Notifications = lazy(() => import("./pages/Notifications"));
+const Friends = lazy(() => import("./pages/Friends"));
+const Events = lazy(() => import("./pages/Events"));
+const Search = lazy(() => import("./pages/Search"));
 
 const App = () => {
     const menu = [
         { text: "Thảo luận", path: "/", component: HomePage },
         { text: "Tin tức", path: "/news", component: NewsPage },
-        { text: "Trang cá nhân", path: "/personal", component: Personal },
+        { text: "Thông báo", path: "/notifications", component: Notifications },
+        { text: "Bạn bè", path: "/friends", component: Friends },
         { text: "Chat", path: "/chat", component: Chat },
-        { text: "Lưu trữ", path: "/saved", component: Saved },
+        { text: "Sự kiện", path: "/events", component: Events },
+        { text: "Tìm kiếm", path: "/search", component: Search },
+        { text: "Đã lưu", path: "/saved", component: Saved },
         { text: "Cài đặt", path: "/settings", component: Settings },
     ];
 
@@ -40,6 +48,16 @@ const App = () => {
                         />
                     ))}
                     <Route path="/login" element={<LoginPage />} />
+                    <Route path="/personal" element={
+                        <PrivateRoute>
+                            <Personal />
+                        </PrivateRoute>
+                    } />
+                    <Route path="/user/:id" element={
+                        <PrivateRoute>
+                            <UserProfile />
+                        </PrivateRoute>
+                    } />
                 </Routes>
             </Suspense>
         </BrowserRouter>

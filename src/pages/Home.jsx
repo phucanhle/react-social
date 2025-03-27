@@ -1,137 +1,14 @@
-import styled, { keyframes } from "styled-components";
 import React, { Suspense, lazy } from "react";
+import "./Home.css";
 
 const FeatureList = lazy(() => import("../components/FeatureList"));
 const FeedList = lazy(() => import("../components/FeedList"));
 const FriendList = lazy(() => import("../components/FriendList"));
 const Banner = lazy(() => import("../components/Banner"));
 
-const Article = styled.article`
-    width: 100%;
-    max-width: 1440px;
-    min-height: 100vh;
-    padding-top: 60px;
-    margin: 20px auto;
-    display: grid;
-    grid-template-columns: 300px 1fr 300px;
-    gap: 24px;
-    background-color: #f0f2f5;
-
-    @media screen and (max-width: 1200px) {
-        grid-template-columns: 1fr 300px;
-        padding: 60px 16px 24px;
-        gap: 16px;
-
-        & > div:first-child {
-            display: none;
-        }
-    }
-
-    @media screen and (max-width: 768px) {
-        grid-template-columns: 1fr;
-        padding: 60px 12px 16px;
-        gap: 12px;
-
-        & > div:last-child {
-            display: none;
-        }
-    }
-`;
-
-const LeftDiv = styled.div`
-    position: sticky;
-    top: 76px;
-    height: fit-content;
-    width: 100%;
-    max-width: 300px;
-
-    @media screen and (max-width: 768px) {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        top: auto;
-        width: 100%;
-        max-width: 100%;
-        z-index: 100;
-        background: white;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 16px 16px 0 0;
-        padding: 12px 0;
-    }
-`;
-
-const MiddleDiv = styled.div`
-    width: 100%;
-    max-width: 680px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-
-    @media screen and (max-width: 768px) {
-        max-width: 100%;
-        gap: 16px;
-        padding-bottom: 80px;
-    }
-`;
-
-const RightDiv = styled.div`
-    position: sticky;
-    top: 76px;
-    height: fit-content;
-    width: 100%;
-    max-width: 300px;
-
-    @media screen and (max-width: 768px) {
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        top: auto;
-        width: 100%;
-        max-width: 100%;
-        z-index: 100;
-        background: white;
-        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
-        border-radius: 16px 16px 0 0;
-        padding: 12px 0;
-    }
-`;
-
-const rotation = keyframes`
-    0% {
-        transform: rotate(0deg);
-    }
-    100% {
-        transform: rotate(360deg);
-    }
-`;
-
-const Loading = styled.div`
-    width: 48px;
-    height: 48px;
-    border: 5px solid #0d7c66;
-    border-bottom-color: transparent;
-    border-radius: 50%;
-    display: inline-block;
-    box-sizing: border-box;
-    animation: ${rotation} 1s linear infinite;
-
-    @media screen and (max-width: 768px) {
-        width: 36px;
-        height: 36px;
-        border-width: 4px;
-    }
-`;
-
 const FallbackComponent = () => (
-    <div style={{ 
-        display: 'flex', 
-        justifyContent: 'center', 
-        alignItems: 'center', 
-        minHeight: '200px',
-        padding: '16px'
-    }}>
-        <Loading />
+    <div className="fallback-component">
+        <div className="loading" />
     </div>
 );
 
@@ -188,23 +65,23 @@ const HomePage = () => {
     ];
 
     return (
-        <Article>
-            <LeftDiv>
+        <article className="article">
+            <div className="left-div">
                 <Suspense fallback={<FallbackComponent />}>
                     <FeatureList />
                 </Suspense>
-            </LeftDiv>
-            <MiddleDiv>
+            </div>
+            <div className="middle-div">
                 <Suspense fallback={<FallbackComponent />}>
                     <FeedList feeds={feeds} post={true} />
                 </Suspense>
-            </MiddleDiv>
-            <RightDiv>
+            </div>
+            <div className="right-div">
                 <Suspense fallback={<FallbackComponent />}>
                     <FriendList />
                 </Suspense>
-            </RightDiv>
-        </Article>
+            </div>
+        </article>
     );
 };
 

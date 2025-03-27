@@ -2,6 +2,7 @@ import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useState } from "react";
 import { setLanguage } from "../redux/languageSlice";
+import { useTranslation } from "../hooks/useTranslation";
 
 const Container = styled.div`
     min-height: 100vh;
@@ -206,6 +207,7 @@ const Setting = () => {
     const user = useSelector((state) => state.auth.user);
     const currentLanguage = useSelector((state) => state.language.currentLanguage);
     const dispatch = useDispatch();
+    const { t } = useTranslation();
     const [notifications, setNotifications] = useState({
         email: true,
         push: true,
@@ -240,7 +242,7 @@ const Setting = () => {
         <Container>
             <Section>
                 <SectionHeader>
-                    <h2>Thông tin tài khoản</h2>
+                    <h2>{t('settings.accountInfo')}</h2>
                     <svg
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
@@ -260,17 +262,17 @@ const Setting = () => {
                     <InfoGroup>
                         <InfoItem>
                             <div className="info">
-                                <label>Tên người dùng</label>
+                                <label>{t('settings.username')}</label>
                                 <span>{user.username}</span>
                             </div>
-                            <button onClick={handlePasswordChange}>Đổi mật khẩu</button>
+                            <button onClick={handlePasswordChange}>{t('settings.changePassword')}</button>
                         </InfoItem>
                         <InfoItem>
                             <div className="info">
-                                <label>Email</label>
+                                <label>{t('settings.email')}</label>
                                 <span>{user.email || "Chưa cập nhật"}</span>
                             </div>
-                            <button onClick={handleEmailChange}>Đổi email</button>
+                            <button onClick={handleEmailChange}>{t('settings.changeEmail')}</button>
                         </InfoItem>
                     </InfoGroup>
                 </SectionContent>
@@ -278,7 +280,7 @@ const Setting = () => {
 
             <Section>
                 <SectionHeader>
-                    <h2>Cài đặt ngôn ngữ</h2>
+                    <h2>{t('settings.language')}</h2>
                     <svg
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
@@ -306,7 +308,7 @@ const Setting = () => {
 
             <Section>
                 <SectionHeader>
-                    <h2>Cài đặt thông báo</h2>
+                    <h2>{t('settings.notifications')}</h2>
                     <svg
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
@@ -326,8 +328,8 @@ const Setting = () => {
                     <InfoGroup>
                         <InfoItem>
                             <div className="info">
-                                <label>Thông báo qua email</label>
-                                <span>Nhận thông báo về các hoạt động mới qua email</span>
+                                <label>{t('settings.emailNotifications')}</label>
+                                <span>{t('settings.emailNotificationsDesc')}</span>
                             </div>
                             <button 
                                 onClick={() => handleNotificationChange("email")}
@@ -336,13 +338,13 @@ const Setting = () => {
                                     color: notifications.email ? "white" : "#1a1a1a"
                                 }}
                             >
-                                {notifications.email ? "Bật" : "Tắt"}
+                                {notifications.email ? t('settings.on') : t('settings.off')}
                             </button>
                         </InfoItem>
                         <InfoItem>
                             <div className="info">
-                                <label>Thông báo đẩy</label>
-                                <span>Nhận thông báo trực tiếp trên thiết bị</span>
+                                <label>{t('settings.pushNotifications')}</label>
+                                <span>{t('settings.pushNotificationsDesc')}</span>
                             </div>
                             <button 
                                 onClick={() => handleNotificationChange("push")}
@@ -351,13 +353,13 @@ const Setting = () => {
                                     color: notifications.push ? "white" : "#1a1a1a"
                                 }}
                             >
-                                {notifications.push ? "Bật" : "Tắt"}
+                                {notifications.push ? t('settings.on') : t('settings.off')}
                             </button>
                         </InfoItem>
                         <InfoItem>
                             <div className="info">
-                                <label>Thông báo tin nhắn</label>
-                                <span>Nhận thông báo khi có tin nhắn mới</span>
+                                <label>{t('settings.messageNotifications')}</label>
+                                <span>{t('settings.messageNotificationsDesc')}</span>
                             </div>
                             <button 
                                 onClick={() => handleNotificationChange("messages")}
@@ -366,7 +368,7 @@ const Setting = () => {
                                     color: notifications.messages ? "white" : "#1a1a1a"
                                 }}
                             >
-                                {notifications.messages ? "Bật" : "Tắt"}
+                                {notifications.messages ? t('settings.on') : t('settings.off')}
                             </button>
                         </InfoItem>
                     </InfoGroup>
@@ -375,7 +377,7 @@ const Setting = () => {
 
             <Section>
                 <SectionHeader>
-                    <h2>Quản lý tài khoản</h2>
+                    <h2>{t('settings.accountManagement')}</h2>
                     <svg
                         aria-hidden="true"
                         xmlns="http://www.w3.org/2000/svg"
@@ -394,7 +396,7 @@ const Setting = () => {
                 <SectionContent>
                     <ButtonGroup>
                         <button className="danger" onClick={handleDeleteAccount}>
-                            Xóa tài khoản
+                            {t('settings.deleteAccount')}
                         </button>
                     </ButtonGroup>
                 </SectionContent>
